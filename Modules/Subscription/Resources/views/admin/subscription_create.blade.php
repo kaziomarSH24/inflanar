@@ -30,7 +30,6 @@
 
                                 <div class="row">
 
-                                    {{-- add selecting input for select Influncer and business --}}
                                     <div class="form-group col-md-6">
                                         <label for="">{{__('admin.Plan For')}} <span class="text-danger">*</span></label>
                                         <select name="type" id="" class="form-control">

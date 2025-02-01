@@ -280,4 +280,7 @@
   'File is required' => 'File is required',
   'Your Account Is Verified By KYC' => 'Your Account Is Verified By KYC',
   'KYC Verifaction' => 'KYC Verifaction',
+
+  /*===================newly added==================*/
+    'Plan Type is required' => 'Plan Type is required',
 );

@@ -17,9 +17,12 @@ class SubscriptionController extends Controller
     public function index()
     {
 
-        $plans = SubscriptionPlan::orderBy('serial','asc')->get();
+        $business_plans = SubscriptionPlan::where('type','business')
+                        ->orderBy('serial','asc')->get();
+        $influencer_plans = SubscriptionPlan::where('type','influencer')
+                        ->orderBy('serial','asc')->get();
 
-        return view('subscription::admin.subscription', compact('plans'));
+        return view('subscription::admin.subscription', compact('business_plans','influencer_plans'));
     }
 
 
@@ -32,6 +35,7 @@ class SubscriptionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'type' => 'required',
             'plan_name' => 'required',
             'plan_price' => 'required',
             'expiration_date' => 'required',
@@ -39,6 +43,7 @@ class SubscriptionController extends Controller
             'serial' => 'required',
             'status' => 'required',
         ],[
+            'type.required' => trans('admin_validation.Plan Type is required'),
             'plan_name.required' => trans('admin_validation.Plan name is required'),
             'plan_price.required' => trans('admin_validation.Plan price is required'),
             'expiration_date.required' => trans('admin_validation.Expiration date is required'),
@@ -47,7 +52,9 @@ class SubscriptionController extends Controller
 
         ]);
 
+        // dd($request->all());
         $plan = new SubscriptionPlan();
+        $plan->type = $request->type;
         $plan->plan_name = $request->plan_name;
         $plan->plan_price = $request->plan_price;
         $plan->expiration_date = $request->expiration_date;
@@ -77,6 +84,7 @@ class SubscriptionController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'type' => 'required',
             'plan_name' => 'required',
             'plan_price' => 'required',
             'expiration_date' => 'required',
@@ -84,6 +92,7 @@ class SubscriptionController extends Controller
             'serial' => 'required',
             'status' => 'required',
         ],[
+            'type.required' => trans('admin_validation.Plan Type is required'),
             'plan_name.required' => trans('admin_validation.Plan name is required'),
             'plan_price.required' => trans('admin_validation.Plan price is required'),
             'expiration_date.required' => trans('admin_validation.Expiration date is required'),
@@ -93,6 +102,7 @@ class SubscriptionController extends Controller
         ]);
 
         $plan = SubscriptionPlan::find($id);
+        $plan->type = $request->type;
         $plan->plan_name = $request->plan_name;
         $plan->plan_price = $request->plan_price;
         $plan->expiration_date = $request->expiration_date;

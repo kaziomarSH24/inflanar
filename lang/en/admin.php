@@ -922,5 +922,6 @@
   'Businesses Plan' => 'Businesses Plan',
   'Influencers Plan' => 'Influencers Plan',
   'Plan For' => 'Plan For',
+  'No Plan Found' => 'No Plan Found',
 
 );

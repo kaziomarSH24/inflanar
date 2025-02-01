@@ -30,6 +30,15 @@
                                 @method('PUT')
 
                                 <div class="row">
+
+                                    <div class="form-group col-md-6">
+                                        <label for="">{{__('admin.Plan For')}} <span class="text-danger">*</span></label>
+                                        <select name="type" id="" class="form-control">
+                                            <option {{ $plan->type == 'business' ? 'selected' : ''}} value="business">{{__('admin.Business')}}</option>
+                                            <option {{ $plan->type == 'influencer' ? 'selected' : ''}} value="influencer">{{__('admin.Influencer')}}</option>
+                                        </select>
+                                    </div>
+
                                     <div class="form-group col-md-6">
                                         <label for="">{{__('admin.Plan Name')}} <span class="text-danger">*</span> </label>
                                         <input type="text" name="plan_name" class="form-control form_control" value="{{ $plan->plan_name }}">

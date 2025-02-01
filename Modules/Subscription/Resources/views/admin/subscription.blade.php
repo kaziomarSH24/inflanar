@@ -47,7 +47,8 @@
                                     <th>{{__('admin.Action')}}</th>
                                 </tr>
 
-                                @foreach ($plans as $index => $plan)
+                               @if ($business_plans->count() > 0)
+                                    @foreach ($business_plans as $index => $plan)
                                     <tr>
                                         <td>{{ $plan->serial }}</td>
                                         <td>{{ $plan->plan_name }}</td>
@@ -71,6 +72,77 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="6">
+                                            <h4 class="text-danger pt-3">{{__('admin.No Plan Found')}}</h4>
+                                        </td>
+                                    </tr>
+                               @endif
+
+
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section-body">
+        <div class="row">
+
+            <div class="col-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-dark">
+                            {{__('admin.Influencers Plan')}}
+                        </h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>{{__('admin.Serial')}}</th>
+                                    <th>{{__('admin.Name')}}</th>
+                                    <th>{{__('admin.Price')}}</th>
+                                    <th>{{__('admin.Expiration')}}</th>
+                                    <th>{{__('admin.Status')}}</th>
+                                    <th>{{__('admin.Action')}}</th>
+                                </tr>
+
+                                @if ($influencer_plans->count() > 0)
+                                    @foreach ($influencer_plans as $index => $plan)
+                                        <tr>
+                                            <td>{{ $plan->serial }}</td>
+                                            <td>{{ $plan->plan_name }}</td>
+                                            <td>{{ $setting->currency_icon }}{{ $plan->plan_price }}</td>
+                                            <td>{{ $plan->expiration_date }}</td>
+
+                                            <td>
+                                                @if ($plan->status == 1)
+                                                    <div class="badge badge-success">{{__('admin.Active')}}</div>
+                                                @else
+                                                    <div class="badge badge-danger">{{__('admin.Inactive')}}</div>
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                <a href="{{ route('admin.subscription-plan.edit', $plan->id) }}" class="btn btn-primary btn-sm"><i
+                                                    class="fa fa-edit"></i></a>
+                                                <a href="" data-url="{{ route('admin.subscription-plan.destroy', $plan->id) }}"
+                                                class="btn btn-danger btn-sm delete"><i class="fa fa-trash"></i></a>
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="6">
+                                            <h4 class="text-danger pt-3">{{__('admin.No Plan Found')}}</h4>
+                                        </td>
+                                    </tr>
+                                @endif
 
 
                             </table>
