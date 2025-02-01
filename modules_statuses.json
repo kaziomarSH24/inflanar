@@ -1,0 +1,11 @@
+{
+    "GlobalSetting": true,
+    "Language": true,
+    "Blog": true,
+    "Page": true,
+    "Section": true,
+    "Service": true,
+    "PaymentGateway": false,
+    "Currency": true,
+    "Subscription": true
+}
