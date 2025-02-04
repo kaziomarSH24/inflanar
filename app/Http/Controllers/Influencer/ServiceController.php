@@ -19,6 +19,7 @@ use App\Models\Review;
 
 use Illuminate\Pagination\Paginator;
 use Auth, Image, File;
+use Modules\Subscription\Entities\SubscriptionFee;
 
 class ServiceController extends Controller
 {
@@ -82,8 +83,9 @@ class ServiceController extends Controller
     public function create()
     {
         $categories = Category::with('translate')->where('status', 'active')->get();
+        $influencer_subscription_fees = SubscriptionFee::where('user_type', 'influencer')->first();
 
-        return view('influencer.service_create', compact('categories'));
+        return view('influencer.service_create', compact('categories', 'influencer_subscription_fees'));
     }
 
     public function store(Request $request)

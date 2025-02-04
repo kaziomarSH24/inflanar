@@ -3,6 +3,12 @@
 <title>{{__('admin.Create Service')}}</title>
 @endsection
 @section('influencer-content')
+<style>
+    .disabled-button {
+        cursor: not-allowed !important;
+        opacity: 0.6;
+    }
+</style>
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
@@ -27,6 +33,19 @@
                             <input type="file" class="form-control-file" name="image">
                         </div>
 
+                        @isset($influencer_subscription_fees)
+                        <div class="form-group pl-3 col-12">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="agree_fees" class="custom-control-input" id="agree_fees">
+                                <label class="custom-control-label" for="agree_fees">I agree to the {{ $influencer_subscription_fees->fees_type == 'percentage' ? $influencer_subscription_fees->fees . '%' : '$' . $influencer_subscription_fees->fees }} processing fee <span data-toggle="tooltip" data-placement="top" class="fa fa-info-circle text--primary" title=""
+                                    data-original-title="This fee applies to influencers. When an influencer books this service, a {{ $influencer_subscription_fees->fees_type == 'percentage' ? $influencer_subscription_fees->fees . '%' : '$' . $influencer_subscription_fees->fees }} fee will be added to their total charge.">
+                                    <span class="text-danger">*</span>
+                                </span>
+                                </label>
+                            </div>
+                            <small id="checkboxMessage" class="text-danger ">Please check this box to proceed.</small>
+                        </div>
+                        @endisset
 
                         <div class="form-group col-12">
                             <label>{{__('admin.Service Name')}} <span class="text-danger">*</span></label>
@@ -117,7 +136,7 @@
 
                     </div>
 
-                    <button class="btn btn-primary" type="submit">{{__('admin.Save Service')}}</button>
+                    <button class="btn btn-primary disabled-button" type="submit" disabled id="submitBtn">{{__('admin.Save Service')}}</button>
                 </div>
 
 
@@ -171,6 +190,26 @@
                 .replace(/[^\w ]+/g,'')
                 .replace(/ +/g,'-');
     }
+
+    $(document).ready(function () {
+        $("#agree_fees").change(function () {
+            if ($(this).is(":checked")) {
+                $("#submitBtn").prop("disabled", false).removeClass("disabled-button");
+                $("#checkboxMessage").addClass("d-none"); // Hide message
+            } else {
+                $("#submitBtn").prop("disabled", true).addClass("disabled-button");
+                $("#checkboxMessage").removeClass("d-none"); // Show message
+            }
+        });
+
+        // Show message when clicking disabled button
+        $("#submitBtn").click(function (event) {
+            if ($(this).prop("disabled")) {
+                event.preventDefault(); // Prevent form submission
+                $("#checkboxMessage").removeClass("d-none"); // Show message
+            }
+        });
+    });
 </script>
 
 @endsection
