@@ -43,12 +43,18 @@ class SubscriptionController extends Controller
             'serial' => 'required',
             'status' => 'required',
         ],[
-            'type.required' => trans('admin_validation.Plan Type is required'),
-            'plan_name.required' => trans('admin_validation.Plan name is required'),
-            'plan_price.required' => trans('admin_validation.Plan price is required'),
-            'expiration_date.required' => trans('admin_validation.Expiration date is required'),
-            'maximum_service.required' => trans('admin_validation.Maximum service is required'),
-            'serial.required' => trans('admin_validation.Serial is required')
+            // 'type.required' => trans('admin_validation.Plan Type is required'),
+            // 'plan_name.required' => trans('admin_validation.Plan name is required'),
+            // 'plan_price.required' => trans('admin_validation.Plan price is required'),
+            // 'expiration_date.required' => trans('admin_validation.Expiration date is required'),
+            // 'maximum_service.required' => trans('admin_validation.Maximum service is required'),
+            // 'serial.required' => trans('admin_validation.Serial is required')
+            'type.required' => trans('Plan Type is required'),
+            'plan_name.required' => trans('Plan name is required'),
+            'plan_price.required' => trans('Plan price is required'),
+            'expiration_date.required' => trans('Expiration date is required'),
+            'maximum_service.required' => trans('Maximum service is required'),
+            'serial.required' => trans('Serial is required')
 
         ]);
 

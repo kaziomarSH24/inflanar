@@ -13,7 +13,7 @@
 use Modules\Subscription\Http\Controllers\SubscriptionController as FrontendSubscriptionController;
 use Modules\Subscription\Http\Controllers\Admin\SubscriptionController;
 use Modules\Subscription\Http\Controllers\Admin\PurchaseController;
-
+use Modules\Subscription\Http\Controllers\Admin\SubscriptionFeesController;
 use Modules\Subscription\Http\Controllers\User\PaymentController;
 use Modules\Subscription\Http\Controllers\User\PaypalController as UserpaypalController;
 use Modules\Subscription\Http\Controllers\Provider\PaypalController;
@@ -52,6 +52,10 @@ Route::group(['middleware' => ['XSS','DEMO']], function () {
 
         Route::get('/assign-plan',[PurchaseController::class, 'create'])->name('assign-plan');
         Route::post('/store-assign-plan',[PurchaseController::class, 'store'])->name('store-assign-plan');
+
+        //Subscription Fees
+        Route::get('/subscription-fees',[SubscriptionFeesController::class, 'index'])->name('subscription-fees');
+        Route::post('/store-subscription-fees',[SubscriptionFeesController::class, 'store'])->name('store-subscription-fee');
 
         Route::get('/purchase-history-show/{id}',[PurchaseController::class, 'show'])->name('purchase-history-show');
         Route::put('/approved-plan-payment/{id}',[PurchaseController::class, 'approved_plan_payment'])->name('approved-plan-payment');
@@ -111,10 +115,6 @@ Route::group(['middleware' => ['XSS','DEMO']], function () {
             Route::get('/paypal-faild-payment',[PaypalController::class, 'paypal_faild_payment'])->name('paypal-faild-payment');
 
         });
-
-
-
-
 
 
 });

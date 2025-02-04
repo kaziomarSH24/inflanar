@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Quick note: here change the user rore ( influencer means business provider, client means influencer)
+ */
 namespace Modules\Subscription\Http\Controllers\Admin;
 
 use Illuminate\Contracts\Support\Renderable;
@@ -30,33 +32,64 @@ class PurchaseController extends Controller
 
     public function create()
     {
+        $business_plans = SubscriptionPlan::where('status', 1)
+                        ->where('type', 'business')
+                        ->orderBy('serial','asc')->get();
+        $influencer_plans = SubscriptionPlan::where('status', 1)
+                        ->where('type', 'influencer')
+                        ->orderBy('serial','asc')->get();
 
-        $plans = SubscriptionPlan::where('status', 1)->orderBy('serial','asc')->get();
+        // $plans = SubscriptionPlan::where('status', 1)->orderBy('serial','asc')->get();
 
-        $providers = User::where('is_influencer','yes')->get();
+        $business_providers = User::where('is_influencer','yes')->get(); //here influencer means business provider
+        $influencers = User::where('is_influencer','no')->get(); //client (normal user) means influencer
+        // dd($influencers);
 
-        return view('subscription::admin.assign_plan', compact('plans','providers'));
+        // return view('subscription::admin.assign_plan', compact('plans','providers'));
+        return view('subscription::admin.assign_plan', compact('business_plans','influencer_plans','business_providers', 'influencers'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
+            'type' => 'required',
             'provider_id' => 'required',
             'plan_id' => 'required',
+            'maximum_service' => 'required|numeric',  //If type is influencer then it will be maximum_applies
         ],[
+            'type.required' => "User type is required",
+            'maximum_service.required' => $request->type == 'influencer' ? 'Maximum applies is required' : 'Maximum service is required',
             'provider_id.required' => trans('admin_validation.Provider is required'),
             'plan_id.required' => trans('admin_validation.Plan is required'),
         ]);
 
         $plan = SubscriptionPlan::find($request->plan_id);
 
-        if($plan->expiration_date == 'monthly'){
-            $expiration_date = date('Y-m-d', strtotime('30 days'));
-        }elseif($plan->expiration_date == 'yearly'){
-            $expiration_date = date('Y-m-d', strtotime('365 days'));
-        }elseif($plan->expiration_date == 'lifetime'){
-            $expiration_date = 'lifetime';
+        if($request->has('expiration_date')){
+            if($request->expiration_date == 'daily'){
+                $expiration_date = date('Y-m-d', strtotime('1 days'));
+            }elseif($request->expiration_date == 'monthly'){
+                $expiration_date = date('Y-m-d', strtotime('30 days'));
+            }elseif($request->expiration_date == 'yearly'){
+                $expiration_date = date('Y-m-d', strtotime('365 days'));
+            }elseif($request->expiration_date == 'lifetime'){
+                $expiration_date = 'lifetime';
+            }
+        }else{
+            if($plan->expiration_date == 'daily'){
+                $expiration_date = date('Y-m-d', strtotime('1 days'));
+            }
+            elseif($plan->expiration_date == 'monthly'){
+                $expiration_date = date('Y-m-d', strtotime('30 days'));
+            }elseif($plan->expiration_date == 'yearly'){
+                $expiration_date = date('Y-m-d', strtotime('365 days'));
+            }elseif($plan->expiration_date == 'lifetime'){
+                $expiration_date = 'lifetime';
+            }
+            return $expiration_date;
         }
+
+
 
         PurchaseHistory::where('provider_id', $request->provider_id)->update(['status' => 'expired']);
 
@@ -68,11 +101,12 @@ class PurchaseController extends Controller
         $purchase->plan_price = $plan->plan_price;
         $purchase->expiration = $plan->expiration_date;
         $purchase->expiration_date = $expiration_date;
-        $purchase->maximum_service = $plan->maximum_service;
+        $purchase->maximum_service = $request->maximum_service ?? $plan->maximum_service;
         $purchase->status = 'active';
         $purchase->payment_method = 'handcash';
         $purchase->payment_status = 'success';
         $purchase->transaction = 'hand_cash';
+        $purchase->type = $request->type; //user type (influencer or business)
         $purchase->save();
 
         $notification = trans('admin_validation.Assign Successfully');

@@ -242,6 +242,7 @@
   })(jQuery);
 </script>
 
+@stack('subscription-script')
 </body>
 </html>
 

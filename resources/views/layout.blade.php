@@ -166,7 +166,8 @@
 
 							<li><a href="{{ route('about-us') }}">{{__('admin.About Us')}}</a></li>
 
-							<li><a href="{{ route('influencers') }}">{{__('admin.Business')}}</a></li>
+							{{-- <li><a href="{{ route('influencers') }}">{{__('admin.influencers')}}</a></li> --}}
+							<li><a href="{{ route('influencers') }}">{{__('admin.Businesses')}}</a></li>
 
                             <li><a href="{{ route('services') }}">{{__('admin.Services')}}</a></li>
 

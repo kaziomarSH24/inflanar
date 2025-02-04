@@ -17,7 +17,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="">{{__('admin.Influencer')}}</label>
+                                    <label for="">{{__('admin.Business')}}</label>
                                     <select name="influencer" id="" class="form-control select2">
                                         <option value="">{{__('admin.Select')}}</option>
                                         @if (request()->has('influencer'))

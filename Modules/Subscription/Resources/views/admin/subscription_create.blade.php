@@ -9,7 +9,8 @@
         <div class="section-header">
             <h1>{{__('admin.Create Plan')}}</h1>
             <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard') }}">{{__('admin.Dashboard')}}</a></div>
+                <div class="breadcrumb-item active"><a
+                        href="{{ route('admin.dashboard') }}">{{__('admin.Dashboard')}}</a></div>
             </div>
         </div>
 
@@ -19,36 +20,43 @@
                     <div class="card">
                         <div class="card-header">
 
-                            <a href="{{ route('admin.subscription-plan.index') }}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> {{__('admin.Go Back')}}</a>
+                            <a href="{{ route('admin.subscription-plan.index') }}" class="btn btn-primary"><i
+                                    class="fa fa-arrow-left"></i> {{__('admin.Go Back')}}</a>
 
                         </div>
 
                         <div class="card-body">
 
-                            <form action="{{route('admin.subscription-plan.store')}}" method="POST" enctype="multipart/form-data">
+                            <form action="{{route('admin.subscription-plan.store')}}" method="POST"
+                                enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="row">
 
                                     <div class="form-group col-md-6">
-                                        <label for="">{{__('admin.Plan For')}} <span class="text-danger">*</span></label>
-                                        <select name="type" id="" class="form-control">
+                                        <label for="">{{__('admin.Plan For')}} <span
+                                                class="text-danger">*</span></label>
+                                        <select name="type" id="userType" class="form-control">
                                             <option value="business">{{__('admin.Business')}}</option>
                                             <option value="influencer">{{__('admin.Influencer')}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="">{{__('admin.Plan Name')}} <span class="text-danger">*</span> </label>
+                                        <label for="">{{__('admin.Plan Name')}} <span class="text-danger">*</span>
+                                        </label>
                                         <input type="text" name="plan_name" class="form-control form_control">
                                     </div>
 
                                     <div class="form-group col-md-6">
-                                        <label for="">{{__('admin.Plan Price')}} <span data-toggle="tooltip" data-placement="top" class="fa fa-info-circle text--primary" title="For free plan use(0)"> <span class="text-danger">*</span></label>
+                                        <label for="">{{__('admin.Plan Price')}} <span data-toggle="tooltip"
+                                                data-placement="top" class="fa fa-info-circle text--primary"
+                                                title="For free plan use(0)"> <span class="text-danger">*</span></label>
                                         <input type="text" name="plan_price" class="form-control form_control">
                                     </div>
 
                                     <div class="form-group col-md-6">
-                                        <label for="">{{__('admin.Expiration Date')}} <span class="text-danger">*</span></label>
+                                        <label for="">{{__('admin.Expiration Date')}} <span
+                                                class="text-danger">*</span></label>
 
                                         <select name="expiration_date" id="" class="form-control">
                                             <option value="daily">{{__('admin.Daily')}}</option>
@@ -60,7 +68,16 @@
                                     </div>
 
                                     <div class="form-group col-md-6">
-                                        <label for="">{{__('admin.Maximum Service')}} <span data-toggle="tooltip" data-placement="top" class="fa fa-info-circle text--primary" title="For unlimited service use(-1)"> <span class="text-danger">*</span></label>
+                                        <label for="" id="maxService">{{__('admin.Maximum Service')}} <span
+                                                data-toggle="tooltip" data-placement="top"
+                                                class="fa fa-info-circle text--primary"
+                                                title="For unlimited service use(-1)"> <span
+                                                    class="text-danger">*</span></label>
+                                        <label for="" id="maxApplies" style="display: none">{{__('admin.Maximum
+                                            Applies')}} <span data-toggle="tooltip" data-placement="top"
+                                                class="fa fa-info-circle text--primary"
+                                                title="For unlimited applies use(-1)"> <span
+                                                    class="text-danger">*</span></label>
                                         <input type="number" name="maximum_service" class="form-control form_control">
                                     </div>
 
@@ -92,5 +109,20 @@
         </div>
     </section>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#userType').on('change', function () {
+            var type = $(this).val();
+            console.log('change');
+            console.log(type);
+            if (type == 'business') {
+                $('#maxService').show();
+                $('#maxApplies').hide();
+            } else {
+                $('#maxService').hide();
+                $('#maxApplies').show();
+            }
+        });
+    });
+</script>
 @endsection
-

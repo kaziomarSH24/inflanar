@@ -16,7 +16,8 @@ use App\Helpers\MailHelper;
 use App\Rules\Captcha;
 use App\Mail\UserRegistration;
 use App\Models\EmailTemplate;
-use Mail;
+use Illuminate\Support\Facades\Mail;
+// use Mail;
 use Str;
 use Session;
 

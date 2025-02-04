@@ -53,8 +53,9 @@
                                         <label for="">{{__('admin.Expiration Date')}} <span class="text-danger">*</span></label>
 
                                         <select name="expiration_date" id="" class="form-control">
+                                            <option {{ $plan->expiration_date == 'daily' ? 'selected' : ''}} value="daily">{{__('admin.Daily')}}</option>
                                             <option {{ $plan->expiration_date == 'monthly' ? 'selected' : ''}} value="monthly">{{__('admin.Monthly')}}</option>
-                                            <option {{ $plan->expiration_date == 'yearly' ? 'selected' : ''}} value="yearly">{{__('admin.Yearly')}}</option>
+                                            {{-- <option {{ $plan->expiration_date == 'yearly' ? 'selected' : ''}} value="yearly">{{__('admin.Yearly')}}</option> --}}
                                             <option {{ $plan->expiration_date == 'lifetime' ? 'selected' : ''}} value="lifetime">{{__('admin.Lifetime')}}</option>
                                         </select>
 

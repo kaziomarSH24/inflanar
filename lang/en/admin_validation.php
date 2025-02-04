@@ -283,4 +283,6 @@
 
   /*===================newly added==================*/
     'Plan Type is required' => 'Plan Type is required',
+    'Provider is required' => 'Provider is required',
+    'Plan is required' => 'Plan is required',
 );

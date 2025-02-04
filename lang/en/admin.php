@@ -922,6 +922,12 @@
   'Businesses Plan' => 'Businesses Plan',
   'Influencers Plan' => 'Influencers Plan',
   'Plan For' => 'Plan For',
+  'User Type' => 'User Type',
   'No Plan Found' => 'No Plan Found',
+  'Subscription Fee' => 'Subscription Fee',
+  'Select Business Provider' => 'Select Business Provider',
+  'Select Influencer' => 'Select Influencer',
+  'Maximum Applies' => 'Maximum Applies',
+  'Subscription Fees' => 'Subscription Fees',
 
 );

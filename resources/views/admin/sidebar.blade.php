@@ -129,6 +129,8 @@
 
                   <li class="{{ Route::is('admin.assign-plan') ? 'active' : '' }}"><a class="nav-link" href="{{route('admin.assign-plan')}}">{{__('admin.Assign Plan')}}</a></li>
 
+                  <li class="{{ Route::is('admin.subscription-fees') ? 'active' : '' }}"><a class="nav-link" href="{{route('admin.subscription-fees')}}">{{__('admin.Subscription Fees')}}</a></li>
+
               </ul>
           </li>
       @else

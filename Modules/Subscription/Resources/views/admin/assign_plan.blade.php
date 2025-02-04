@@ -18,39 +18,92 @@
                     <div class="card">
                         <div class="card-header">
 
-                            <a href="{{ route('admin.purchase-history') }}" class="btn btn-primary"><i class="fa fa-arrow-left"></i>
+                            <a href="{{ route('admin.purchase-history') }}" class="btn btn-primary"><i
+                                    class="fa fa-arrow-left"></i>
                                 {{__('admin.Go Back')}}</a>
 
                         </div>
 
                         <div class="card-body">
 
-                            <form action="{{route('admin.store-assign-plan')}}" method="POST" enctype="multipart/form-data">
+                            <form action="{{route('admin.store-assign-plan')}}" method="POST"
+                                enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="">{{__('admin.User Type')}} <span
+                                                class="text-danger">*</span></label>
+                                        <select name="type" id="userType" class="form-control">
+                                            <option value="business">{{__('admin.Business')}}</option>
+                                            <option value="influencer">{{__('admin.Influencer')}}</option>
+                                        </select>
+                                    </div>
 
-
-                                    <div class="form-group col-12">
+                                    <div class="form-group col-md-6">
                                         <label for="">{{__('admin.Select Plan')}} <span class="text-danger">*</span></label>
-                                        <select name="plan_id" id="" class="form-control">
-                                            @foreach ($plans as $plan)
-                                                <option value="{{ $plan->id }}">{{ $plan->plan_name }}</option>
+                                        <select name="plan_id" id="planSelect" class="form-control">
+                                            <option value="">{{__('admin.Select')}}</option>
+                                            @foreach ($business_plans as $plan)
+                                                <option value="{{ $plan->id }}" data-type="business">{{ $plan->plan_name }}</option>
+                                            @endforeach
+                                            @foreach ($influencer_plans as $plan)
+                                                <option value="{{ $plan->id }}" data-type="influencer" style="display: none;">{{ $plan->plan_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
+
+
+                                    <div class="form-group col-md-6">
+                                        <label for="" id="maxService">{{__('admin.Maximum Service')}} <span data-toggle="tooltip"
+                                                data-placement="top" class="fa fa-info-circle text--primary"
+                                                title="For unlimited service use(-1)"> <span
+                                                    class="text-danger">*</span></label>
+                                        <label for="" id="maxApplies" style="display: none">{{__('admin.Maximum Applies')}} <span data-toggle="tooltip"
+                                                data-placement="top" class="fa fa-info-circle text--primary"
+                                                title="For unlimited service use(-1)"> <span
+                                                    class="text-danger">*</span></label>
+                                        <input type="number" name="maximum_service" class="form-control form_control">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="">{{__('admin.Expiration Date')}} <span
+                                                class="text-danger">*</span></label>
+
+                                        <select name="expiration_date" id="" class="form-control">
+                                            <option value="daily">{{__('admin.Daily')}}</option>
+                                            <option value="monthly">{{__('admin.Monthly')}}</option>
+                                            {{-- <option value="yearly">{{__('admin.Yearly')}}</option> --}}
+                                            <option value="lifetime">{{__('admin.Lifetime')}}</option>
+                                        </select>
+
+                                    </div>
+
 
                                     <div class="form-group col-12">
-                                        <label for="">{{__('admin.Select Provider')}} <span class="text-danger">*</span></label>
-                                        <select name="provider_id" id="" class="form-control select2 ">
+                                        <label for="" id="businessLbl">{{__('admin.Select Business Provider')}} <span
+                                                class="text-danger">*</span></label>
+                                        <label for="" id="influencerLbl" style="display: none">{{__('admin.Select Influencer')}} <span
+                                                class="text-danger">*</span></label>
+                                        <div id="businessProviders">
+                                            <select name="provider_id" id="" class="form-control select2 " data-type="business">
+                                                <option value="" >{{__('admin.Select')}}</option>
+                                                @foreach ($business_providers as $provider)
+                                                <option value="{{ $provider->id }}">{{ $provider->name }} - {{
+                                                    $provider->phone }} - {{ $provider->email }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div id="influencerProviders" style="display: none">
+                                        <select name="provider_id"  class="form-control select2" style="display: none" data-type="influencer">
                                             <option value="">{{__('admin.Select')}}</option>
-                                            @foreach ($providers as $provider)
-                                                <option value="{{ $provider->id }}">{{ $provider->name }} - {{ $provider->phone }} - {{ $provider->email }}</option>
+                                            @foreach ($influencers as $provider)
+                                            <option value="{{ $provider->id }}" >{{ $provider->name }} - {{
+                                                $provider->phone }} - {{ $provider->email }}</option>
                                             @endforeach
                                         </select>
+                                        </div>
                                     </div>
-
-
 
                                     <div class="form-group col-md-12">
                                         <button type="submit" class="btn btn-primary">{{__('admin.Assign Plan')}}</button>
@@ -69,4 +122,51 @@
     </section>
 </div>
 @endsection
+
+@push('subscription-script')
+<script>
+    $(document).ready(function () {
+        $('#userType').change(function () {
+            var selectedType = $(this).val();
+            $('#planSelect option').each(function () {
+                if ($(this).data('type') === selectedType) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+            $('#planSelect').val($('#planSelect option:visible:first').val());
+
+
+
+            //select provider
+            if(selectedType == 'business'){
+                $('#businessLbl').show();
+                $('#influencerLbl').hide();
+                $('#businessLbl select').show();
+                $('#influencerLbl select').hide();
+
+                $('#maxService').show();
+                $('#maxApplies').hide();
+
+                $('#businessProviders').show();
+                $('#influencerProviders').hide();
+            }else{
+                $('#businessLbl').hide();
+                $('#influencerLbl').show();
+                $('#businessLbl select').hide();
+                $('#influencerLbl select').show();
+
+                $('#maxService').hide();
+                $('#maxApplies').show();
+
+                $('#businessProviders').hide();
+                $('#influencerProviders').show();
+
+            }
+
+        });
+    });
+</script>
+@endpush
 
