@@ -21,7 +21,8 @@
                             <thead>
                                 <tr>
                                     <th >{{__('admin.SN')}}</th>
-                                    <th >{{__('admin.Client')}}</th>
+                                    {{-- <th >{{__('admin.Client')}}</th> --}}
+                                    <th >{{__('admin.Influencer')}}</th>
                                     <th >{{__('admin.Total Amount')}}</th>
                                     <th >{{__('admin.Order Id')}}</th>
                                     <th >{{__('admin.Status')}}</th>

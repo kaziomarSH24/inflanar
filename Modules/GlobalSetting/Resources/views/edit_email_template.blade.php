@@ -87,7 +87,7 @@
                                                     $name="{{influencer_name}}";
                                                 @endphp
                                                 <td>{{ $name }}</td>
-                                                <td>{{__('admin.Influencer Name')}}</td>
+                                                <td>{{__('admin.Business Name')}}</td>
                                             </tr>
                                             <tr>
                                                 @php
@@ -189,7 +189,7 @@
                                                     $name="{{name}}";
                                                 @endphp
                                                 <td>{{ $name }}</td>
-                                                <td>{{__('admin.Client Name')}}</td>
+                                                <td>{{__('admin.Influencer Name')}}</td>
                                             </tr>
 
                                             <tr>
@@ -223,7 +223,7 @@
                                                     $name="{{name}}";
                                                 @endphp
                                                 <td>{{ $name }}</td>
-                                                <td>{{__('admin.Influencer Name')}}</td>
+                                                <td>{{__('admin.Business Name')}}</td>
                                             </tr>
 
                                             <tr>

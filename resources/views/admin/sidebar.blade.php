@@ -91,9 +91,11 @@
             {{-- <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i><span>{{__('admin.Manage Client')}}</span></a> --}}
             <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i><span>{{__('admin.Manage Influencers')}}</span></a>
             <ul class="dropdown-menu">
-                <li class="{{ Route::is('admin.client-list') || Route::is('admin.client-show') || Route::is('admin.send-email-to-all-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.client-list') }}">{{__('admin.Influencer List')}}</a></li>
+                {{-- <li class="{{ Route::is('admin.client-list') || Route::is('admin.client-show') || Route::is('admin.send-email-to-all-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.client-list') }}">{{__('admin.Influencer List')}}</a></li> --}}
+                <li class="{{ Route::is('admin.client-list') || Route::is('admin.client-show') || Route::is('admin.send-email-to-all-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.client-list') }}">{{__('admin.Business List')}}</a></li>
 
-                <li class="{{ Route::is('admin.pending-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.pending-client') }}">{{__('admin.Pending Influencer')}}</a></li>
+                <li class="{{ Route::is('admin.pending-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.pending-client') }}">{{__('admin.Pending Business')}}</a></li>
+                {{-- <li class="{{ Route::is('admin.pending-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.pending-client') }}">{{__('admin.Pending Influencer')}}</a></li> --}}
             </ul>
           </li>
 
@@ -140,7 +142,8 @@
         <ul class="dropdown-menu">
             <li class="{{ Route::is('admin.withdraw-method.*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.withdraw-method.index') }}">{{__('admin.Withdraw Method')}}</a></li>
 
-            <li class="{{ Route::is('admin.influencer-withdraw') || Route::is('admin.show-influencer-withdraw') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.influencer-withdraw') }}">{{__('admin.Influencer Withdraw')}}</a></li>
+            {{-- <li class="{{ Route::is('admin.influencer-withdraw') || Route::is('admin.show-influencer-withdraw') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.influencer-withdraw') }}">{{__('admin.Influencer Withdraw')}}</a></li> --}}
+            <li class="{{ Route::is('admin.influencer-withdraw') || Route::is('admin.show-influencer-withdraw') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.influencer-withdraw') }}">{{__('admin.Business Withdraw')}}</a></li>
 
             <li class="{{ Route::is('admin.pending-influencer-withdraw') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.pending-influencer-withdraw') }}">{{__('admin.Withdraw Request')}}</a></li>
 

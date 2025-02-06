@@ -1,19 +1,19 @@
 
 @extends('admin.master_layout')
 @section('title')
-<title>{{__('admin.Influencer Details')}}</title>
+<title>{{__('admin.Business Details')}}</title>
 @endsection
 @section('admin-content')
       <!-- Main Content -->
       <div class="main-content">
         <section class="section">
           <div class="section-header">
-            <h1>{{__('admin.Influencer Details')}}</h1>
+            <h1>{{__('admin.Business Details')}}</h1>
 
           </div>
 
           <div class="section-body">
-            <a href="{{ route('admin.influencer-list') }}" class="btn btn-primary"><i class="fas fa-list"></i> {{__('admin.Influencer List')}}</a>
+            <a href="{{ route('admin.influencer-list') }}" class="btn btn-primary"><i class="fas fa-list"></i> {{__('admin.Business List')}}</a>
             <div class="row mt-5">
                 <div class="col-md-3">
                   <div class="card card-statistic-1">
@@ -150,7 +150,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h1>{{__('admin.Influencer Action')}}</h1>
+                                <h1>{{__('admin.Business Action')}}</h1>
                             </div>
                             <div class="card-body text-center">
                                 <div class="row">
@@ -159,7 +159,7 @@
                                     </div>
 
                                     <div class="col-12">
-                                        <a href="{{ route('admin.review-list', ['influencer_id' => $influencer->id]) }}" class="btn btn-primary btn-block btn-lg my-2">{{__('admin.Influencer Reviews')}}</a>
+                                        <a href="{{ route('admin.review-list', ['influencer_id' => $influencer->id]) }}" class="btn btn-primary btn-block btn-lg my-2">{{__('admin.Business Reviews')}}</a>
                                     </div>
 
                                     <div class="col-12">

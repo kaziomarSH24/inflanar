@@ -1,272 +1,311 @@
 @extends('layout')
 @section('title')
-    <title>{{ $service->seo_title }}</title>
-    @php
-        $tags = '';
-        if($service->tags){
-            foreach (json_decode($service->tags) as $service_tag) {
-                $tags .= $service_tag->value.', ';
-            }
-        }
-    @endphp
+<title>{{ $service->seo_title }}</title>
+@php
+$tags = '';
+if($service->tags){
+foreach (json_decode($service->tags) as $service_tag) {
+$tags .= $service_tag->value.', ';
+}
+}
+@endphp
 
-    <meta name="keywords" content="{{ $tags }}">
-    <meta name="title" content="{{ $service->seo_title }}">
-    <meta name="description" content="{{ $service->seo_description }}">
+<meta name="keywords" content="{{ $tags }}">
+<meta name="title" content="{{ $service->seo_title }}">
+<meta name="description" content="{{ $service->seo_description }}">
 @endsection
 @section('frontend-content')
 
-    <!-- Breadcrumbs -->
-    <section class="inflanar-breadcrumb" style="background-image: url({{ asset($breadcrumb) }});">
-        <div class="container">
-            <div class="row">
-                <!-- Breadcrumb-Content -->
-                <div class="col-12">
-                    <div class="inflanar-breadcrumb__inner">
-                        <div class="inflanar-breadcrumb__content">
-                            <h2 class="inflanar-breadcrumb__title m-0">{{__('admin.Services')}}</h2>
-                            <ul class="inflanar-breadcrumb__menu list-none">
-                                <li><a href="{{ route('home') }}">{{__('admin.Home')}}</a></li>
-                                <li class="active"><a href="javascript:;">{{__('admin.Services')}}</a></li>
-                            </ul>
-                        </div>
+<!-- Breadcrumbs -->
+<section class="inflanar-breadcrumb" style="background-image: url({{ asset($breadcrumb) }});">
+    <div class="container">
+        <div class="row">
+            <!-- Breadcrumb-Content -->
+            <div class="col-12">
+                <div class="inflanar-breadcrumb__inner">
+                    <div class="inflanar-breadcrumb__content">
+                        <h2 class="inflanar-breadcrumb__title m-0">{{__('admin.Services')}}</h2>
+                        <ul class="inflanar-breadcrumb__menu list-none">
+                            <li><a href="{{ route('home') }}">{{__('admin.Home')}}</a></li>
+                            <li class="active"><a href="javascript:;">{{__('admin.Services')}}</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- End breadcrumbs -->
+    </div>
+</section>
+<!-- End breadcrumbs -->
 
 
-    <!-- Features -->
-    <section class="pd-top-90 pd-btm-120">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 col-12 mg-top-30">
+<!-- Features -->
+<section class="pd-top-90 pd-btm-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 col-12 mg-top-30">
 
-                    <!--Tab Nav -->
-                    <div class="list-group inflanar-bdetail__tabnav" id="list-tab" role="tablist">
-                        <a class="list-group-item active service_tab" data-bs-toggle="list" href="#in-tab6" role="tab">
-                            <span>1</span> {{__('admin.Service')}}
-                        </a>
-                        <a class="list-group-item information_tab" data-bs-toggle="list" href="#in-tab7" role="tab">
-                            <span>2</span> {{__('admin.Information')}}
-                        </a>
-                    </div>
+                <!--Tab Nav -->
+                <div class="list-group inflanar-bdetail__tabnav" id="list-tab" role="tablist">
+                    <a class="list-group-item active service_tab" data-bs-toggle="list" href="#in-tab6" role="tab">
+                        <span>1</span> {{__('admin.Service')}}
+                    </a>
+                    {{-- <a class="list-group-item information_tab" data-bs-toggle="list" href="#in-tab7" role="tab">
+                        <span>2</span> {{__('admin.Information')}}
+                    </a> --}}
+                </div>
 
-                    <!-- Tab Content -->
-                    <div class="tab-content mg-top-30" id="nav-tabContent">
-                        <!-- Single Tab -->
-                        <div class="tab-pane fade active show basic_info_tab" id="in-tab6" role="tabpanel">
+                <!-- Tab Content -->
+                <div class="tab-content mg-top-30" id="nav-tabContent">
+                    <!-- Single Tab -->
+                    <div class="tab-pane fade active show basic_info_tab" id="in-tab6" role="tabpanel">
 
-                            <div class="inflanar-sdetail">
-                                <!-- Service Thumb -->
-                                <div class="inflanar-sdetail__thumb">
-                                    <img src="{{ asset($service->thumbnail_image) }}" alt="#">
-                                </div>
-                                <!-- Service Content -->
-                                <div class="inflanar-sdetail__content">
-                                    <h2 class="inflanar-sdetail__title mg-btm-20">{{ $service->title }}</h2>
+                        <div class="inflanar-sdetail">
+                            <!-- Service Thumb -->
+                            <div class="inflanar-sdetail__thumb">
+                                <img src="{{ asset($service->thumbnail_image) }}" alt="#">
+                            </div>
+                            <!-- Service Content -->
+                            <div class="inflanar-sdetail__content">
+                                <h2 class="inflanar-sdetail__title mg-btm-20">{{ $service->title }}</h2>
 
-                                    <div class="inflanar-sdetail__tcontent">
+                                <div class="inflanar-sdetail__tcontent">
 
-                                        {!! clean($service->description) !!}
+                                    {!! clean($service->description) !!}
 
-                                         <h4 class="inflanar-sdetail__tcontent--title mg-top-40">{{__('admin.Package Features')}}</h4>
-                                        <div class="row mg-btm-20">
-                                            <div class="col-lg-6 col-12">
-                                                <ul class="inflanar-list-style inflanar-list-style__grey  inflanar-list-style__row list-none">
-                                                    @if ($service->features)
-                                                        @foreach (json_decode($service->features) as $feature)
-                                                            @if ($feature)
-                                                            <li><img src="{{ asset('frontend/img/in-check-icon2.svg') }}">{{ $feature }}</li>
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                </ul>
-                                            </div>
+                                    <h4 class="inflanar-sdetail__tcontent--title mg-top-40">{{__('admin.Package
+                                        Features')}}</h4>
+                                    <div class="row mg-btm-20">
+                                        <div class="col-lg-6 col-12">
+                                            <ul
+                                                class="inflanar-list-style inflanar-list-style__grey  inflanar-list-style__row list-none">
+                                                @if ($service->features)
+                                                @foreach (json_decode($service->features) as $feature)
+                                                @if ($feature)
+                                                <li><img src="{{ asset('frontend/img/in-check-icon2.svg') }}">{{
+                                                    $feature }}</li>
+                                                @endif
+                                                @endforeach
+                                                @endif
+                                            </ul>
                                         </div>
+                                    </div>
 
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Addon List -->
+                        @if ($additionals->count() > 0)
+                        <div class="inflanar-opackage mg-top-60">
+                            <h3 class="inflanar-opackage__title">{{__('admin.Upgrade your order with extras')}}</h3>
+                            <!-- Single Addon -->
+                            @foreach ($additionals as $additional)
+                            <div class="inflanar-opackage__single">
+                                <div class="inflanar-opackage__thumb">
+                                    <img src="{{ asset($additional->image) }}" alt="#">
+                                </div>
+                                <div class="inflanar-opackage__scontent">
+                                    <div class="inflanar-opackage__list">
+                                        <h4 class="inflanar-opackage__ltitle">{{ $additional->title }}</h4>
+                                        <ul
+                                            class="inflanar-list-style inflanar-list-style__grey  inflanar-list-style__row list-none">
+                                            @if ($additional->features)
+                                            @foreach (json_decode($additional->features) as $add_feature)
+                                            @if ($add_feature)
+                                            <li><img src="{{ asset('frontend/img/in-check-circle.svg') }}">{{
+                                                $add_feature }}</li>
+                                            @endif
+                                            @endforeach
+                                            @endif
+                                        </ul>
+                                    </div>
+                                    <div class="inflanar-opackage__aprice">
+                                        <div class="inflanar-opackage__apgroup">
+                                            <h4 class="inflanar-opackage__aamount">
+                                                {{ currency($additional->price) }}
+                                            </h4>
+                                            <a href="javascript:;"
+                                                class="inflanar-btn inflanar-btn__border add_extra_item"
+                                                data-service_id="{{ $additional->id }}"
+                                                data-service_price="{{ $additional->price }}"
+                                                data-service_name="{{ $additional->title }}">{{__('admin.Add Now')}}</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Addon List -->
-                            @if ($additionals->count() > 0)
-                                <div class="inflanar-opackage mg-top-60">
-                                    <h3 class="inflanar-opackage__title">{{__('admin.Upgrade your order with extras')}}</h3>
-                                    <!-- Single Addon -->
-                                    @foreach ($additionals as $additional)
-                                        <div class="inflanar-opackage__single">
-                                            <div class="inflanar-opackage__thumb">
-                                                <img src="{{ asset($additional->image) }}" alt="#">
-                                            </div>
-                                            <div class="inflanar-opackage__scontent">
-                                                <div class="inflanar-opackage__list">
-                                                    <h4 class="inflanar-opackage__ltitle">{{ $additional->title }}</h4>
-                                                    <ul class="inflanar-list-style inflanar-list-style__grey  inflanar-list-style__row list-none">
-                                                        @if ($additional->features)
-                                                            @foreach (json_decode($additional->features) as $add_feature)
-                                                                @if ($add_feature)
-                                                                <li><img src="{{ asset('frontend/img/in-check-circle.svg') }}">{{ $add_feature }}</li>
-                                                                @endif
-                                                            @endforeach
-                                                        @endif
-                                                    </ul>
-                                                </div>
-                                                <div class="inflanar-opackage__aprice">
-                                                    <div class="inflanar-opackage__apgroup">
-                                                        <h4 class="inflanar-opackage__aamount">
-                                                            {{ currency($additional->price) }}
-                                                        </h4>
-                                                        <a  href="javascript:;" class="inflanar-btn inflanar-btn__border add_extra_item" data-service_id="{{ $additional->id }}" data-service_price="{{ $additional->price }}" data-service_name="{{ $additional->title }}">{{__('admin.Add Now')}}</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                    <!-- End Single Addon -->
-                                </div>
-                            @endif
-                            <div class="inflanar-step-buttons mg-top-60">
-                                <button href="javascript:;" id="next_btn" class="inflanar-btn">{{__('admin.Next Step')}}</button>
-                            </div>
+                            @endforeach
+                            <!-- End Single Addon -->
                         </div>
-                        <!-- End Single Tab -->
-
-                        <!-- Single Tab -->
-                        <div class="tab-pane fade booking_form_tab" id="in-tab7" role="tabpanel">
-
-                            <div class="inflanar-sdetail">
-                                <!-- Service Content -->
-                                <div class="inflanar-sdetail__content">
-                                    <h2 class="inflanar-sdetail__title m-0">{{__('admin.Booking Information')}}</h2>
-                                    <form id="submitReadyToBooking">
-                                        @csrf
-
-                                        <div class="row">
-                                            <div class="col-lg-6 col-md-6 col-12 mg-top-20">
-                                                <div class="form-group inflanar-form-input">
-                                                    <label>{{__('admin.Name')}}*</label>
-                                                    <input class="ecom-wc__form-input" type="text" name="name" placeholder="{{__('admin.Name')}}">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-12 mg-top-20">
-                                                <div class="form-group inflanar-form-input">
-                                                    <label>{{__('admin.Email')}}</label>
-                                                    <input class="ecom-wc__form-input" type="email" name="email" placeholder="{{__('admin.Email')}}">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-12 mg-top-20">
-                                                <div class="form-group inflanar-form-input">
-                                                    <label>{{__('admin.Phone')}} *</label>
-                                                    <input class="ecom-wc__form-input" type="text" name="phone" placeholder="{{__('admin.Phone')}}">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6 col-md-6 col-12 mg-top-20">
-                                                <div class="form-group inflanar-form-input">
-                                                    <label>{{__('admin.Your Address')}}*</label>
-                                                    <input class="ecom-wc__form-input" type="text" name="address" placeholder="{{__('admin.Your Address')}}">
-                                                </div>
-                                            </div>
-                                            <div class="col-12 mg-top-20">
-                                                <div class="form-group inflanar-form-input">
-                                                    <label>{{__('admin.Write Note')}}</label>
-                                                    <div class="form-group inflanar-form-input">
-                                                        <textarea placeholder="{{__('admin.Write something')}}" name="order_note"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <input type="hidden" id="input_extra_total" name="extra_total" value="0.00">
-                                        <input type="hidden" id="input_sub_total" name="sub_total" value="{{ $service->price }}">
-                                        <input type="hidden" id="input_total" name="total" value="{{ $service->price }}">
-                                        <input type="hidden" id="input_date" name="date" value="">
-                                        <input type="hidden" id="schedule_time_slot" name="schedule_time_slot" value="">
-
-                                        <div id="extra_input">
-                                        </div>
-
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="inflanar-step-buttons mg-top-60">
-                                <button id="step-prev-button" type="submit" class="inflanar-btn inflanar-btn__border"><span>{{__('admin.Previous')}}</span></button>
-                                <button id="goToPayment" class="inflanar-btn">{{__('admin.Next Step')}}</button>
-                            </div>
-                        </div>
-                        <!-- End Single Tab -->
+                        @endif
+                        {{-- <div class="inflanar-step-buttons mg-top-60">
+                            <button href="javascript:;" id="next_btn" class="inflanar-btn">{{__('admin.Next Step')}}</button>
+                        </div> --}}
                     </div>
+                    <!-- End Single Tab -->
+
+                    <!-- Single Tab -->
+                    <div class="tab-pane fade booking_form_tab" id="in-tab7" role="tabpanel">
+
+                        <div class="inflanar-sdetail">
+                            <!-- Service Content -->
+                            <div class="inflanar-sdetail__content">
+                                <h2 class="inflanar-sdetail__title m-0">{{__('admin.Booking Information')}}</h2>
+                                <form id="submitReadyToBooking">
+                                    @csrf
+
+                                    {{-- <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-12 mg-top-20">
+                                            <div class="form-group inflanar-form-input">
+                                                <label>{{__('admin.Name')}}*</label>
+                                                <input class="ecom-wc__form-input" type="text" name="name"
+                                                    placeholder="{{__('admin.Name')}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-12 mg-top-20">
+                                            <div class="form-group inflanar-form-input">
+                                                <label>{{__('admin.Email')}}</label>
+                                                <input class="ecom-wc__form-input" type="email" name="email"
+                                                    placeholder="{{__('admin.Email')}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-12 mg-top-20">
+                                            <div class="form-group inflanar-form-input">
+                                                <label>{{__('admin.Phone')}} *</label>
+                                                <input class="ecom-wc__form-input" type="text" name="phone"
+                                                    placeholder="{{__('admin.Phone')}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-12 mg-top-20">
+                                            <div class="form-group inflanar-form-input">
+                                                <label>{{__('admin.Your Address')}}*</label>
+                                                <input class="ecom-wc__form-input" type="text" name="address"
+                                                    placeholder="{{__('admin.Your Address')}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mg-top-20">
+                                            <div class="form-group inflanar-form-input">
+                                                <label>{{__('admin.Write Note')}}</label>
+                                                <div class="form-group inflanar-form-input">
+                                                    <textarea placeholder="{{__('admin.Write something')}}"
+                                                        name="order_note"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+
+                                    {{-- <input type="hidden" id="input_service_id" name="service_id"
+                                        value="{{ $service->id }}"> --}}
+
+                                    <input type="hidden" id="input_extra_total" name="extra_total" value="0.00">
+                                    <input type="hidden" id="input_sub_total" name="sub_total"
+                                        value="{{ $service->price }}">
+                                    <input type="hidden" id="input_total" name="total" value="{{ $service->price }}">
+                                    <input type="hidden" id="input_date" name="date" value="">
+                                    <input type="hidden" id="schedule_time_slot" name="schedule_time_slot" value="">
+                                    <input type="hidden" id="claculateFees" name="fees">
+
+                                    <div id="extra_input">
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        {{-- <div class="inflanar-step-buttons mg-top-60">
+                            <button id="step-prev-button" type="submit"
+                                class="inflanar-btn inflanar-btn__border"><span>{{__('admin.Previous')}}</span></button>
+                            <button id="goToPayment" class="inflanar-btn">{{__('admin.Next Step')}}</button>
+                        </div> --}}
+                    </div>
+                    <!-- End Single Tab -->
                 </div>
+            </div>
 
-                <div class="col-lg-3 col-12 mg-top-30">
-                    <!-- Single Sidebar -->
-                    <div class="book-single-sidebar">
-                        <div id="service_available_dates" ></div>
-                    </div>
-                    <!-- Single Sidebar -->
-                    <div class="book-single-sidebar mg-top-30">
-                        <h4 class="book-single-sidebar__title">{{__('admin.Select Schedule')}}</h4>
-                        <select class="property-sidebar__group inflanar-border" id="schedule_box">
-                            <option value="">{{__('admin.Select')}}</option>
-                        </select>
-                    </div>
-                    <!-- Single Sidebar -->
-                    <div class="book-single-sidebar p-0 mg-top-30">
-                        <div class="book-single-sidebar__summary">
-                            <h4 class="book-single-sidebar__title">{{__('admin.Booking Summery')}}</h4>
-                            <ul class="inflanar-list-style inflanar-list-style__white list-style-normal list-none">
+            <div class="col-lg-3 col-12 mg-top-30">
+                <!-- Single Sidebar -->
+                <div class="book-single-sidebar">
+                    <div id="service_available_dates"></div>
+                </div>
+                <!-- Single Sidebar -->
+                <div class="book-single-sidebar mg-top-30">
+                    <h4 class="book-single-sidebar__title">{{__('admin.Select Schedule')}}</h4>
+                    <select class="property-sidebar__group inflanar-border" id="schedule_box">
+                        <option value="">{{__('admin.Select')}}</option>
+                    </select>
+                </div>
+                <!-- Single Sidebar -->
+                <div class="book-single-sidebar p-0 mg-top-30">
+                    <div class="book-single-sidebar__summary">
+                        <h4 class="book-single-sidebar__title">{{__('admin.Booking Summery')}}</h4>
+                        <ul class="inflanar-list-style inflanar-list-style__white list-style-normal list-none">
 
-                                @if ($service->features)
-                                    @foreach (json_decode($service->features) as $feature)
-                                        @if ($feature)
-                                        <li><img src="{{ asset('frontend/img/in-check-icon3.svg') }}">{{ $feature }}</li>
-                                        @endif
-                                    @endforeach
-                                @endif
-                            </ul>
-                        </div>
-                        <div class="inflanar-package-info">
-                            <div class="inflanar-package-info__group">
-                                <!-- Single Package Info -->
-                                <div class="inflanar-package-info__single">
-                                    <p><span><b>{{__('admin.Package Fee')}}</b></span>
-                                        <span><b>
+                            @if ($service->features)
+                            @foreach (json_decode($service->features) as $feature)
+                            @if ($feature)
+                            <li><img src="{{ asset('frontend/img/in-check-icon3.svg') }}">{{ $feature }}</li>
+                            @endif
+                            @endforeach
+                            @endif
+                        </ul>
+                    </div>
+                    <div class="inflanar-package-info">
+                        <div class="inflanar-package-info__group">
+                            <!-- Single Package Info -->
+                            <div class="inflanar-package-info__single">
+                                <p><span><b>{{__('admin.Package Fee')}}</b></span>
+                                    <span><b>
                                             {{ currency($service->price) }}
                                         </b></span>
-                                    </p>
+                                </p>
+                            </div>
+                            <!-- Single Package Info -->
+                            <div class="inflanar-package-info__single">
+                                <p><span><b>{{__('admin.Extra Service')}}</b></span> <span><b
+                                            class="extra_service_price">
+
+                                            {{ currency(0.00) }}
+                                        </b></span></p>
+                                <div class="extra_service_area">
+
                                 </div>
-                                <!-- Single Package Info -->
-                                <div class="inflanar-package-info__single">
-                                    <p><span><b>{{__('admin.Extra Service')}}</b></span> <span><b class="extra_service_price">
 
-                                        {{ currency(0.00) }}
-                                    </b></span></p>
-                                    <div class="extra_service_area">
-
-                                    </div>
-
-                                </div>
-
-                                <!-- Single Package Info -->
-                                <div class="inflanar-package-info__single">
-                                    <p><span><b>{{__('admin.Total')}}</b></span> <span><b class="total_price">
-                                        {{ currency($service->price) }}
-                                    </b></span></p>
-                                </div>
                             </div>
 
+                            <div class="inflanar-package-info__single">
+                                <p><span><b>{{__('admin.Fees')}}</b></span> <span>
+                                    <b class="fees" id="fees" data-fees="{{ $fees->fees }}" data-fees-type="{{ $fees->fees_type }}">
+                                            {{ $fees->fees_type == 'percentage' ? $fees->fees . '%' :
+                                            currency($fees->fees) }}
+                                        </b>
+                                        &nbsp;<input type="checkbox" name="agree_fees" class="custom-control-input"
+                                            id="agree_fees"></span>
+
+                                </p>
+                            </div>
+
+                            <!-- Single Package Info -->
+                            <div class="inflanar-package-info__single">
+                                <p><span><b>{{__('admin.Total')}}</b></span> <span><b class="total_price">
+                                            {{ currency($service->price) }}
+                                        </b></span></p>
+                            </div>
                         </div>
 
                     </div>
+
+                </div>
+                {{-- New booking button added --}}
+                <div class="inflanar-step-buttons mg-top-30">
+                    {{-- <button id="step-prev-button" type="submit"
+                        class="inflanar-btn inflanar-btn__border"><span>{{__('admin.Previous')}}</span></button> --}}
+                    <button id="goToPayment" class="inflanar-btn">{{__('admin.Booking')}}</button>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- End Features -->
-
+    </div>
+</section>
+<!-- End Features -->
+{{-- @dd(Session::get('currency_icon')) --}}
 <script>
     let currency_icon = "{{ Session::get('currency_icon') }}"
     let currency_position = "{{ Session::get('currency_position') }}"
@@ -281,13 +320,25 @@
 
             $("#goToPayment").on("click", function(e){
                 e.preventDefault();
+                let agree_fees = $("#agree_fees").is(":checked");
 
                 $.ajax({
                     type: 'post',
                     data: $('#submitReadyToBooking').serialize(),
                     url: "{{ route('store-booking-info-to-session') }}",
                     success: function (response) {
+                        console.log(response);
+                        if(response.status == 'faild'){
+                            toastr.error(response.message)
+                            setTimeout(() => {
+                                window.location = "{{ route('user.edit-profile') }}"
+                            }, 3000);
+                        }
                         if(response.status == 'success'){
+                            if(!agree_fees){
+                            toastr.error("Please agree with fees")
+                            return;
+                        }
                             window.location = "{{ route('payment', $service->slug) }}";
                         }
                     },
@@ -368,14 +419,52 @@
                     current_this.html("{{__('admin.Add Now')}}");
                 }
 
+
                 load_extra_service()
 
             })
+            $("#agree_fees").prop("checked", false);
         });
     })(jQuery);
 
+    //add fees in total amount
+
+    $("#agree_fees").on("change", function(){
+    let fees = $("#fees").data('fees');
+    let feesType = $("#fees").data('fees-type');
+    let total = parseFloat($("#input_total").val());
+    let extra_total = parseFloat($("#input_extra_total").val());
+    let total_price = total;
+    let claculateFees = $("#claculateFees");
+
+    if($(this).is(":checked")){
+        let feesPercent =(total * fees) / 100;
+        if(feesType == 'percentage'){
+            total_price += feesPercent;
+            claculateFees.val(feesPercent);
+        } else {
+            let feesFixed = parseFloat(fees);
+            total_price += feesFixed;
+            claculateFees.val(feesFixed);
+        }
+    } else {
+        if(feesType == 'percentage'){
+            total_price -= (total / (1 + fees / 100)) * (fees / 100);
+        } else {
+            total_price -= parseFloat(fees);
+        }
+    }
+
+    total_price = total_price.toFixed(2);
+
+    $(".total_price").html(`${currency_icon}${total_price * currency_rate}`);
+    $("#input_total").val(total_price);
+});
+
+
 
     function load_extra_service(){
+        $("#agree_fees").prop("checked", false).trigger("change");
         let html_service = '';
         let extra_price = 0.00;
         let extra_input = '';

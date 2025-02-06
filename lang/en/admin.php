@@ -470,10 +470,10 @@
   'Are You sure delete this item ?' => 'Are You sure delete this item ?',
   'Booking Id' => 'Booking Id',
   'Booking Created' => 'Booking Created',
-  'awaiting for Business approval' => 'awaiting for Business approval',
+  'awaiting for business approval' => 'awaiting for business approval',
   'Approved' => 'Approved',
-  'Declined by Business' => 'Declined by Business',
-  'Declined by Influencer' => 'Declined by Influencer',
+  'Declined by business' => 'Declined by business',
+  'Declined by influencer' => 'Declined by influencer',
   'Complete' => 'Complete',
   'Declined' => 'Declined',
   'Mark as complete' => 'Mark as complete',
@@ -916,8 +916,7 @@
   'Live Chat' => 'Live Chat',
   'Buyer List' => 'Buyer List',
   'Type message' => 'Type message',
-
-
+  'Refund Request' => 'Refund Request',
   /*======================New Added=======================*/
   'Businesses Plan' => 'Businesses Plan',
   'Influencers Plan' => 'Influencers Plan',
@@ -929,5 +928,8 @@
   'Select Influencer' => 'Select Influencer',
   'Maximum Applies' => 'Maximum Applies',
   'Subscription Fees' => 'Subscription Fees',
+  'Booking' => 'Booking',
+  'Fees' => 'Fees',
+  'Fees Amount' => 'Fees Amount',
 
 );

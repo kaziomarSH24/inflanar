@@ -12,14 +12,16 @@
           </div>
 
           <div class="section-body">
-            <a href="{{ route('admin.influencer-withdraw') }}" class="btn btn-primary"><i class="fas fa-list"></i> {{__('admin.Influencer withdraw')}}</a>
+            {{-- <a href="{{ route('admin.influencer-withdraw') }}" class="btn btn-primary"><i class="fas fa-list"></i> {{__('admin.Influencer withdraw')}}</a> --}}
+            <a href="{{ route('admin.influencer-withdraw') }}" class="btn btn-primary"><i class="fas fa-list"></i> {{__('admin.Business withdraw')}}</a>
             <div class="row mt-4">
                 <div class="col-12">
                   <div class="card">
                     <div class="card-body">
                         <table class="table table-bordered table-striped table-hover">
                             <tr>
-                                <td width="50%">{{__('admin.influencer')}}</td>
+                                {{-- <td width="50%">{{__('admin.Influencer')}}</td> --}}
+                                <td width="50%">{{__('admin.Business')}}</td>
                                 <td width="50%">
                                     <a href="{{ route('admin.influencer-show',$withdraw->influencer->id) }}">{{ $withdraw->influencer->name }}</a>
                                 </td>

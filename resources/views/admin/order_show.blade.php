@@ -36,14 +36,15 @@
                                     <p>{!! html_decode(clean(nl2br($order->order_note))) !!}</p>
                                 @endif
 
-                                <h6 class="mt-4">{{__('admin.Client Details')}}</h6>
+                                {{-- <h6 class="mt-4">{{__('admin.Client Details')}}</h6> --}}
+                                <h6 class="mt-4">{{__('admin.Influencer Details')}}</h6>
                                 <hr>
                                 <p>{{__('admin.Name')}} : <a href="{{ route('admin.client-show', $client->id) }}">{{ $client->name }}</a></p>
                                 <p>{{__('admin.Phone')}} : {{ $client->Phone }}</p>
                                 <p>{{__('admin.Email')}} : {{ $client->email }}</p>
                                 <p>{{__('admin.Address')}} : {{ $client->address }}</p>
 
-                                <h6 class="mt-4">{{__('admin.Influencer Details')}}</h6>
+                                <h6 class="mt-4">{{__('admin.Business Details')}}</h6>
                                 <hr>
                                 <p>{{__('admin.Name')}} : <a href="{{ route('admin.influencer-show', $influencer->id) }}">{{ $influencer->name }}</a></p>
                                 <p>{{__('admin.Phone')}} : {{ $influencer->Phone }}</p>
@@ -100,7 +101,7 @@
                                     @elseif ($order->order_status == 'order_decliened_by_influencer')
                                     {{__('admin.Declined by influencer')}}
                                     @elseif ($order->order_status == 'order_decliened_by_client')
-                                    <span class="badge badge-danger">{{__('admin.Declined by Client')}}</span>
+                                    <span class="badge badge-danger">{{__('admin.Declined by Influencer')}}</span>
                                     @elseif ($order->order_status == 'complete')
                                     {{__('admin.Complete')}}
                                     @endif
@@ -177,7 +178,8 @@
                         @if ($refund_request)
                             <div class="card mt-3">
                                 <div class="card-body">
-                                    <h6>{{__('admin.Rofund Request by Client')}}</h6>
+                                    {{-- <h6>{{__('admin.Rofund Request by Client')}}</h6> --}}
+                                    <h6>{{__('admin.Rofund Request by Influencer')}}</h6>
                                     <table class="table">
                                         <tr>
                                             <td>{{__('admin.Request Date')}}</td>

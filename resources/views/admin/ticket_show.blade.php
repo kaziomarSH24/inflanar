@@ -102,7 +102,8 @@
                                 <p>
                                     {{__('admin.Name')}}: <a href="{{ route('admin.client-show',$ticket->user) }}">{{ $ticket->user->name }}</a>
                                 </p>
-                                <p>{{__('admin.User Type')}} : {{__('admin.Client')}}</p>
+                                {{-- <p>{{__('admin.User Type')}} : {{__('admin.Client')}}</p> --}}
+                                <p>{{__('admin.User Type')}} : {{__('admin.Influencer')}}</p>
                                 <p>{{__('admin.Email')}} : {{ $ticket->user->email  }}</p>
                                 <p>{{__('admin.Phone')}} : {{ $ticket->user->Phone  }}</p>
                             @else
@@ -110,7 +111,8 @@
 
                                     {{__('admin.Name')}}: <a href="{{ route('admin.influencer-show',$ticket->user->id) }}">{{ $ticket->user->name }}</a>
                                 </p>
-                                <p>{{__('admin.User Type')}} : {{__('admin.Influencer')}}</p>
+                                {{-- <p>{{__('admin.User Type')}} : {{__('admin.Influencer')}}</p> --}}
+                                <p>{{__('admin.User Type')}} : {{__('admin.Business')}}</p>
                                 <p>{{__('admin.Email')}} : {{ $ticket->user->email  }}</p>
                                 <p>{{__('admin.Phone')}} : {{ $ticket->user->Phone  }}</p>
                             @endif

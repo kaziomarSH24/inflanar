@@ -36,7 +36,8 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="">{{__('admin.Client')}}</label>
+                                    <label for="">{{__('admin.Influencer')}}</label>
+                                    {{-- <label for="">{{__('admin.Client')}}</label> --}}
                                     <select name="client" id="" class="form-control select2">
                                         <option value="">{{__('admin.Select')}}</option>
                                         @if (request()->has('client'))
@@ -87,18 +88,21 @@
                                     <p>{{__('admin.Booking Id')}} : {{ $order->order_id }}</p>
                                     <p>{{__('admin.Booking Created')}} : {{ $order->created_at->format('h:i A, d-m-Y') }}</p>
                                     <p>{{__('admin.Schedule Date')}} : {{ $order->schedule_time_slot }}, {{ date('d-M-Y', strtotime($order->booking_date)) }}</p>
-                                    <p>{{__('admin.Client')}} : {{ $order->client->name }}</p>
+                                    <p>{{__('admin.Influencer')}} : {{ $order->client->name }}</p>
                                     <p>{{__('admin.Phone')}} : {{ $order->client->phone }}</p>
                                     <p>{{__('admin.Status')}} :
 
                                         @if ($order->order_status == 'awaiting_for_influencer_approval')
-                                            <span class="badge badge-danger">{{__('admin.awaiting for influencer approval')}}</span>
+                                            {{-- <span class="badge badge-danger">{{__('admin.awaiting for influencer approval')}}</span> --}}
+                                            <span class="badge badge-danger">{{__('admin.awaiting for Business approval')}}</span>
                                         @elseif ($order->order_status == 'approved_by_influencer')
                                             <span class="badge badge-success">{{__('admin.Approved')}}</span>
                                         @elseif ($order->order_status == 'order_decliened_by_influencer')
-                                            <span class="badge badge-danger">{{__('admin.Declined by influencer')}}</span>
+                                            {{-- <span class="badge badge-danger">{{__('admin.Declined by influencer')}}</span> --}}
+                                            <span class="badge badge-danger">{{__('admin.Declined by Business')}}</span>
                                         @elseif ($order->order_status == 'order_decliened_by_client')
-                                            <span class="badge badge-danger">{{__('admin.Declined by Client')}}</span>
+                                            {{-- <span class="badge badge-danger">{{__('admin.Declined by Client')}}</span> --}}
+                                            <span class="badge badge-danger">{{__('admin.Declined by influencer')}}</span>
                                         @elseif ($order->order_status == 'complete')
                                             <span class="badge badge-success">{{__('admin.Complete')}}</span>
                                         @endif

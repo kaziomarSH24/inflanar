@@ -34,7 +34,7 @@ use Modules\PaymentGateway\Entities\MercadoPagoPayment;
 
 use Modules\PaymentGateway\Http\Controllers\PaymentGatewayController;
 use App\Models\MultiCurrency;
-
+use MercadoPago\Subscription;
 use Modules\Subscription\Entities\ProviderStripe;
 use Modules\Subscription\Entities\ProviderRazorpay;
 use Modules\Subscription\Entities\ProviderFlutterwave;
@@ -43,6 +43,7 @@ use Modules\Subscription\Entities\ProviderMollie;
 use Modules\Subscription\Entities\ProviderInstamojo;
 use Modules\Subscription\Entities\ProviderBankHandcash;
 use Modules\Subscription\Entities\ProviderPaypal;
+use Modules\Subscription\Entities\SubscriptionFee;
 
 class PaymentController extends Controller
 {
@@ -58,10 +59,14 @@ class PaymentController extends Controller
 
         $additionals = AdditionalService::where('service_id', $service->id)->get();
 
+        $subscription_fees = SubscriptionFee::where('user_type', 'influencer')->first();
+
+        // dd($subscription_fees);
+
         return view('service_booking')->with([
             'service' => $service,
             'additionals' => $additionals,
-
+            'fees' => $subscription_fees,
         ]);
 
     }
@@ -91,10 +96,10 @@ class PaymentController extends Controller
 
     public function store_booking_info_to_session(Request $request){
         $rules = [
-            'address'=>'required',
+            // 'address'=>'required',
             'date'=>'required',
-            'name'=>'required',
-            'phone'=>'required',
+            // 'name'=>'required',
+            // 'phone'=>'required',
             'schedule_time_slot'=>'required',
         ];
         $customMessages = [
@@ -106,6 +111,15 @@ class PaymentController extends Controller
         ];
         $this->validate($request, $rules,$customMessages);
 
+        $user_address = auth()->user()->address;
+        $user_name = auth()->user()->name;
+        $user_phone = auth()->user()->phone;
+        $user_email = auth()->user()->email;
+
+        if($user_address == null || $user_name == null || $user_phone == null ){
+            return response()->json(['status' => 'faild' , 'message' => 'Please update your profile information']);
+        }
+
         $booking_info = (object) array(
             'ids' => $request->ids,
             'prices' => $request->prices,
@@ -115,11 +129,12 @@ class PaymentController extends Controller
             'total' => $request->total,
             'date' => $request->date,
             'schedule_time_slot' => $request->schedule_time_slot,
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'order_note' => $request->order_note,
+            'name' => $user_name,
+            'email' => $user_email,
+            'phone' => $user_phone,
+            'address' => $user_address,
+            'fees' => $request->fees,
+            // 'order_note' => $request->order_note,
         );
 
         Session::put('booking_info', $booking_info);
@@ -144,10 +159,12 @@ class PaymentController extends Controller
                 $notification = array('messege'=>$notification,'alert-type'=>'error');
                 return redirect()->route('booking-service', $slug)->with($notification);
             }
-
+            // dd(is_int((int)$booking_info->total));
             $discount = 0.00;
             if(Session::get('coupon_code') && Session::get('offer_percentage')) {
+
                 $offer_percentage = Session::get('offer_percentage');
+
                 $discount = ($offer_percentage / 100) * $booking_info->total;
             }
 
@@ -193,6 +210,8 @@ class PaymentController extends Controller
                 $iyzico = IyzicoPayment::first();
                 $mercado = MercadoPagoPayment::first();
             }
+            $provider_stripe['image'] = $stripe->image;
+            // dd($booking_info);
 
             return view('subscription::payment', [
                 'service' => $service,
@@ -202,6 +221,7 @@ class PaymentController extends Controller
                 'paypal' => $paypal,
                 'bank' => $bank,
                 'stripe' => $stripe,
+                // 'stripe' => $provider_stripe,
                 'razorpay' => $razorpay,
                 'flutterwave' => $flutterwave,
                 'paystack' => $paystackAndMollie,
@@ -365,13 +385,15 @@ class PaymentController extends Controller
     }
 
     public function pay_via_stripe(Request $request, $slug){
-
+        // dd($request->all());
         $service = Service::where(['status' => 'active', 'approve_by_admin' => 'enable', 'is_banned' => 'disable', 'slug' => $slug])->first();
+
+        // dd($service);
 
         if(!$service)abort(404);
 
         $booking_info = Session::get('booking_info');
-
+        // dd($booking_info);
         if(!$booking_info){
             $notification = trans('admin_validation.Something went wrong, please try again');
             $notification = array('messege'=>$notification,'alert-type'=>'error');
@@ -391,6 +413,13 @@ class PaymentController extends Controller
 
         $stripe = StripePayment::first();
         $payable_amount = round(($booking_info->total - $coupon_discount) * $stripe->currency->currency_rate,2);
+
+        /**
+        * new code added provider stripe
+        */
+        // $provider_stripe = ProviderStripe::where('provider_id', $service->influencer_id)->first();
+
+        // Stripe\Stripe::setApiKey($provider_stripe->stripe_secret);
         Stripe\Stripe::setApiKey($stripe->stripe_secret);
 
         $result = Stripe\Charge::create ([
@@ -860,6 +889,14 @@ class PaymentController extends Controller
 
         }
 
+        //new code added
+        $influencer_fees= SubscriptionFee::where('user_type','influencer')->first(); // influencer fee
+        $fees = [
+            'fees_type' => $influencer_fees->fees_type,
+            'fees' => $influencer_fees->fees,
+        ];
+        //=============
+
         $order = new Order();
         $order->order_id = substr(rand(0,time()),0,10);
         $order->booking_date = $booking_info->date;
@@ -870,6 +907,8 @@ class PaymentController extends Controller
         $order->service_id = $service->id;
         $order->package_amount = $service->price;
         $order->additional_amount = $booking_info->extra_total;
+        $order->fees_amount = $booking_info->fees;
+        $order->fees = json_encode($fees);
         $order->coupon_discount  = $coupon_discount;
         $order->total_amount = $booking_info->total;
         $order->payment_method = $payment_method;
@@ -878,7 +917,7 @@ class PaymentController extends Controller
         $order->order_status = 'awaiting_for_influencer_approval';
         $order->package_features = $service->features;
         $order->additional_services = json_encode($additional_services);
-        $order->order_note = $booking_info->order_note;
+        // $order->order_note = $booking_info->order_note; // order note removed
         $order->client_name = $booking_info->name;
         $order->client_phone = $booking_info->phone;
         $order->client_email = $booking_info->email;

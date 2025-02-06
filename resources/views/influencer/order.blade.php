@@ -58,10 +58,12 @@
                                                 <span class="badge badge-success">{{__('admin.Approved')}}</span>
 
                                             @elseif ($order->order_status == 'order_decliened_by_influencer')
-                                                <span class="badge badge-danger">{{__('admin.Declined by influencer')}}</span>
+                                                <span class="badge badge-danger">{{__('admin.Declined by business')}}</span>
+                                                {{-- <span class="badge badge-danger">{{__('admin.Declined by influencer')}}</span> --}}
 
                                             @elseif ($order->order_status == 'order_decliened_by_client')
-                                                <span class="badge badge-danger">{{__('admin.Declined by Client')}}</span>
+                                                <span class="badge badge-danger">{{__('admin.Declined by influencer')}}</span>
+                                                {{-- <span class="badge badge-danger">{{__('admin.Declined by Client')}}</span> --}}
                                             @elseif ($order->order_status == 'complete')
                                                 <span class="badge badge-success">{{__('admin.Complete')}}</span>
                                             @endif

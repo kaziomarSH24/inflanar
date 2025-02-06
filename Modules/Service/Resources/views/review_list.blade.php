@@ -21,7 +21,8 @@
                             <thead>
                                 <tr>
                                     <th width="5%">{{__('admin.SN')}}</th>
-                                    <th width="15%">{{__('admin.Client')}}</th>
+                                    {{-- <th width="15%">{{__('admin.Client')}}</th> --}}
+                                    <th width="15%">{{__('admin.Influencer')}}</th>
                                     <th width="30%">{{__('admin.Service')}}</th>
                                     <th width="5%">{{__('admin.Rating')}}</th>
                                     <th width="10%">{{__('admin.Status')}}</th>

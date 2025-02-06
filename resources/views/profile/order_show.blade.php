@@ -135,7 +135,8 @@
                                                     <p class="inflanar-profile-info__text">{{ html_decode($order->order_note) }}</p>
                                                 </li>
                                                 <li class="inflanar-dflex">
-                                                    <h4 class="inflanar-profile-info__title">{{__('admin.Influencer')}}:</h4>
+                                                    {{-- <h4 class="inflanar-profile-info__title">{{__('admin.Influencer')}}:</h4> --}}
+                                                    <h4 class="inflanar-profile-info__title">{{__('admin.Business')}}:</h4>
                                                     <p class="inflanar-profile-info__text">{{ $order->influencer->name }}</p>
                                                 </li>
                                                 <li class="inflanar-dflex">
@@ -185,6 +186,22 @@
                                                     </p>
                                                 </li>
                                                 <li class="inflanar-dflex">
+                                                    <h4 class="inflanar-profile-info__title">{{__('admin.Fees')}}:</h4>
+                                                    <p class="inflanar-profile-info__text">
+
+                                                        {{ $order->fees->fees_type == 'fixed' ? currency($order->fees->fees) : $order->fees->fees.'%' }}
+
+                                                    </p>
+                                                </li>
+                                                <li class="inflanar-dflex">
+                                                    <h4 class="inflanar-profile-info__title">{{__('admin.Fees Amount')}}:</h4>
+                                                    <p class="inflanar-profile-info__text">
+
+                                                        {{ currency($order->fees_amount) }}
+
+                                                    </p>
+                                                </li>
+                                                <li class="inflanar-dflex">
                                                     <h4 class="inflanar-profile-info__title">{{__('admin.Discount')}} (-):</h4>
                                                     <p class="inflanar-profile-info__text">
 
@@ -203,11 +220,12 @@
                                                     <p class="inflanar-profile-info__text">
 
                                                         @if ($order->order_status == 'awaiting_for_influencer_approval')
-                                                        {{__('admin.awaiting for influencer approval')}}
+                                                        {{-- {{__('admin.awaiting for influencer approval')}} --}}
+                                                        {{__('admin.awaiting for business approval')}}
                                                         @elseif ($order->order_status == 'approved_by_influencer')
                                                         {{__('admin.Approved')}}
                                                         @elseif ($order->order_status == 'order_decliened_by_influencer')
-                                                        {{__('admin.Declined by influencer')}}
+                                                        {{__('admin.Declined by business')}}
                                                         @elseif ($order->order_status == 'order_decliened_by_client')
                                                         {{__('admin.Declined by me')}}
                                                         @elseif ($order->order_status == 'complete')
@@ -247,6 +265,7 @@
                                             <div class="inflanar-order-list mg-top-30">
                                                 <div class="inflanar-profile-info__head">
                                                     <h3 class="inflanar-profile-info__heading">{{__('admin.Refund Request :')}}</h3>
+                                                    {{-- <h3 class="inflanar-profile-info__heading">{{__('admin.Refund Request :')}}</h3> --}}
                                                 </div>
                                                 <ul class="inflanar-profile-info__list inflanar-dflex-column list-none">
                                                     <li class="inflanar-dflex">

@@ -20,11 +20,13 @@
                       <div class="table-responsive table-invoice">
                         <table class="table table-striped table-bordered">
                            <tr>
-                               <td>{{__('admin.Client')}}</td>
+                               {{-- <td>{{__('admin.Client')}}</td> --}}
+                               <td>{{__('admin.Influencer')}}</td>
                                <td><a href="{{ route('admin.client-show', $review->user_id) }}">{{ $review->user->name }}</a></td>
                            </tr>
                            <tr>
-                               <td>{{__('admin.Client Email')}}</td>
+                               {{-- <td>{{__('admin.Client Email')}}</td> --}}
+                               <td>{{__('admin.Influencer Email')}}</td>
                                <td>{{ $review->user->email }}</td>
                            </tr>
                            <tr>
@@ -33,7 +35,8 @@
                            </tr>
 
                            <tr>
-                                <td>{{__('admin.Influencer')}}</td>
+                                {{-- <td>{{__('admin.Influencer')}}</td> --}}
+                                <td>{{__('admin.Business')}}</td>
                                 <td><a href="{{ route('admin.influencer-show', $review->influencer_id) }}">{{ $review->influencer->name }}</a></td>
                             </tr>
 

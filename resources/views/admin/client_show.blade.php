@@ -1,18 +1,21 @@
 
 @extends('admin.master_layout')
 @section('title')
-<title>{{__('admin.Client Detail')}}</title>
+{{-- <title>{{__('admin.Client Detail')}}</title> --}}
+<title>{{__('admin.Influencer Detail')}}</title>
 @endsection
 @section('admin-content')
       <!-- Main Content -->
       <div class="main-content">
         <section class="section">
           <div class="section-header">
-            <h1>{{__('admin.Client Detail')}}</h1>
+            <h1>{{__('admin.Influencer Detail')}}</h1>
+            {{-- <h1>{{__('admin.Client Detail')}}</h1> --}}
           </div>
 
           <div class="section-body">
-            <a href="{{ route('admin.client-list') }}" class="btn btn-primary"><i class="fas fa-list"></i> {{__('admin.Client List')}}</a>
+            {{-- <a href="{{ route('admin.client-list') }}" class="btn btn-primary"><i class="fas fa-list"></i> {{__('admin.Client List')}}</a> --}}
+            <a href="{{ route('admin.client-list') }}" class="btn btn-primary"><i class="fas fa-list"></i> {{__('admin.Influencer List')}}</a>
             <div class="row mt-4">
                 <div class="col">
                   <div class="card">

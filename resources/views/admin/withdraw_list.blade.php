@@ -1,13 +1,15 @@
-@extends('admin.master_layout')
+@extends('admin.master_layout')admin.Influencer
 @section('title')
-<title>{{__('admin.Influencer withdraw')}}</title>
+{{-- <title>{{__('admin.Influencer withdraw')}}</title> --}}
+<title>{{__('admin.Business withdraw')}}</title>
 @endsection
 @section('admin-content')
       <!-- Main Content -->
       <div class="main-content">
         <section class="section">
           <div class="section-header">
-            <h1>{{__('admin.Influencer withdraw')}}</h1>
+            {{-- <h1>{{__('admin.Influencer withdraw')}}</h1> --}}
+            <h1>{{__('admin.Business withdraw')}}</h1>
 
           </div>
 
@@ -21,7 +23,8 @@
                             <thead>
                                 <tr>
                                     <th >{{__('admin.SN')}}</th>
-                                    <th >{{__('admin.Influencer')}}</th>
+                                    {{-- <th >{{__('admin.Influencer')}}</th> --}}
+                                    <th >{{__('admin.Business')}}</th>
                                     <th >{{__('admin.Method')}}</th>
                                     <th >{{__('admin.Charge')}}</th>
                                     <th >{{__('admin.Total Amount')}}</th>

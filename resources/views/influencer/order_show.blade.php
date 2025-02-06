@@ -37,7 +37,8 @@
                                     <p>{!! html_decode(clean(nl2br($order->order_note))) !!}</p>
                                 @endif
 
-                                <h6 class="mt-4">{{__('admin.Client Details')}}</h6>
+                                {{-- <h6 class="mt-4">{{__('admin.Client Details')}}</h6> --}}
+                                <h6 class="mt-4">{{__('admin.Influencer Details')}}</h6>
                                 <hr>
                                 <p>{{__('admin.Name')}} : {{ $client->name }}</p>
                                 <p>{{__('admin.Phone')}} : {{ $client->Phone }}</p>
@@ -86,7 +87,8 @@
                                     @elseif ($order->order_status == 'complete')
                                     {{__('admin.Complete')}}
                                     @elseif ($order->order_status == 'order_decliened_by_client')
-                                    <span class="badge badge-danger">{{__('admin.Declined by Client')}}</span>
+                                    <span class="badge badge-danger">{{__('admin.Declined by influencer')}}</span>
+                                    {{-- <span class="badge badge-danger">{{__('admin.Declined by Client')}}</span> --}}
                                     @endif
                                 </p>
 

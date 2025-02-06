@@ -69,10 +69,10 @@
                                             <span class="inflanar-booking-info__label">{{__('admin.Your Address')}}:</span>
                                             <span class="inflanar-booking-info__desc">{{ $booking_info->address }}</span>
                                         </li>
-                                        <li>
+                                        {{-- <li>
                                             <span class="inflanar-booking-info__label">{{__('admin.Order Note')}}:</span>
                                             <span class="inflanar-booking-info__desc inflanar-booking-info__flabel inflanar-font-normal">{{ $booking_info->order_note }}</span>
-                                        </li>
+                                        </li> --}}
                                     </ul>
 
                                 </div>
@@ -233,6 +233,14 @@
                                         @endif
 
 									</div>
+
+                                    <div class="inflanar-package-info__single">
+										<p><span><b>{{__('admin.Fees')}}</b></span>
+                                            <span><b>
+                                                {{ currency($booking_info->fees) }}
+                                            </b></span>
+                                        </p>
+									</div>
 									<!-- Single Package Info -->
 									<div class="inflanar-package-info__single">
 										<p><span>{{__('admin.Subtotal')}}</span> <span>
@@ -303,7 +311,7 @@
         </div>
     </div>
     <!-- Bank Payment Modal -->
-
+    {{-- @dd($stripe->provider_id) --}}
     <!-- Stripe Payment Modal -->
     <div class="modal fade" id="stripeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -312,9 +320,9 @@
                 <h5 class="modal-title" id="exampleModalLabel">{{__('admin.Pay via Stripe')}}</h5>
             </div>
             <div class="modal-body">
-                <form role="form" action="{{ route('pay-via-stripe', $service->slug) }}" method="POST" class="require-validation" data-cc-on-file="false" data-stripe-publishable-key="{{ $stripe->stripe_key }}" id="payment-form">
+                <form role="form" action="{{ route('pay-via-stripe', $service->slug) }}" method="POST" class="require-validation" data-cc-on-file="false"  data-stripe-publishable-key="{{ $stripe->stripe_key }}" id="payment-form">
                     @csrf
-
+                     {{-- <input type="hidden" name="provider_id" value="{{ $stripe->provider_id }}"> --}}
                     <div class="row">
                         <div class="col-xl-12 mb-2">
                             <div class="form-group inflanar-form-input">
@@ -388,6 +396,7 @@
                 e.preventDefault();
                 Stripe.setPublishableKey($form.data('stripe-publishable-key'));
                 Stripe.createToken({
+                    // provider_id: $form.data('provider-id'),
                     number: $('.card-number').val(),
                     cvc: $('.card-cvc').val(),
                     exp_month: $('.card-expiry-month').val(),

@@ -20,7 +20,8 @@
                       <div class="table-responsive table-invoice">
                         <table class="table table-striped table-bordered">
                            <tr>
-                               <td>{{__('admin.Client')}}</td>
+                               {{-- <td>{{__('admin.Client')}}</td> --}}
+                               <td>{{__('admin.Influencer')}}</td>
                                <td>{{ $review->user->name }}</td>
                            </tr>
 

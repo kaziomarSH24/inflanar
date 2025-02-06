@@ -36,7 +36,7 @@ class ProfileController extends Controller
         $active_order = Order::where('order_status','approved_by_influencer')->where('client_id', $user->id)->count();
 
         $complete_order = Order::where('order_status','complete')->where('client_id', $user->id)->count();
-
+        // dd($complete_order);
         $cancel_order = Order::where('client_id', $user->id)->where('order_status','order_decliened_by_influencer')->orWhere('order_status', 'order_decliened_by_client')->count();
 
         return view('profile.dashboard', ['user' => $user, 'active_order' => $active_order, 'complete_order' => $complete_order, 'cancel_order' => $cancel_order]);
@@ -138,7 +138,13 @@ class ProfileController extends Controller
 
         $user = Auth::guard('web')->user();
 
-        $orders = Order::with('influencer')->select('id','influencer_id','order_id','booking_date','order_status','total_amount','coupon_discount')->where('client_id', $user->id)->orderBy('id','desc')->paginate(10);
+         $orders = Order::with('influencer')->select('id','influencer_id','order_id','booking_date','order_status','total_amount','coupon_discount','fees_amount', 'fees')->where('client_id', $user->id)->orderBy('id','desc')->paginate(10);
+         $orders->transform(function($order){
+            $order->fees = json_decode($order->fees);
+            return $order;
+        });
+
+        // return $orders;
 
         return view('profile.orders', ['orders' => $orders]);
     }
@@ -148,6 +154,9 @@ class ProfileController extends Controller
         $user = Auth::guard('web')->user();
 
         $order = Order::with('influencer','service')->where('client_id', $user->id)->where('order_id', $order_id)->first();
+
+        $order->fees = json_decode($order->fees);
+        // return $order;
         if(!$order)abort(404);
         $refund_request = RefundRequest::where('order_id', $order->id)->first();
 
