@@ -239,6 +239,10 @@ Route::group(['middleware' => ['XSS','DEMO']], function () {
 
                 Route::get('/reviews', 'reviews')->name('reviews');
                 Route::post('/store-review', 'store_review')->name('store-review');
+
+                //client subscription plan
+                Route::get('/subscription_plan_show/{id}', 'subscription_plan_show')->name('subscription_plan_show');
+                Route::get('/subscription-plan', 'subscription_plan')->name('subscription-plan');
             });
 
             Route::get('live-chat', [UserMessageController::class, 'index'])->name('live-chat');

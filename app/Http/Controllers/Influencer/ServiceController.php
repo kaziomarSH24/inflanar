@@ -19,6 +19,8 @@ use App\Models\Review;
 
 use Illuminate\Pagination\Paginator;
 use Auth, Image, File;
+use Carbon\Carbon;
+use Modules\Subscription\Entities\PurchaseHistory;
 use Modules\Subscription\Entities\SubscriptionFee;
 
 class ServiceController extends Controller
@@ -90,6 +92,8 @@ class ServiceController extends Controller
 
     public function store(Request $request)
     {
+
+        // dd($request->all());
         $request->validate([
             'image' => 'required',
             'name' => 'required',
@@ -107,6 +111,15 @@ class ServiceController extends Controller
             'description.required' => trans('admin_validation.Description is required')
         ]);
 
+        //check subscription purchase history
+        $auth_user = Auth::guard('web')->user();
+        //check subscription purchase history
+        $response = $this->canCreateService(auth()->id());
+        if ($response->status() == 403) {
+            $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
+            return redirect()->back()->with($notification);
+        }
+
         $service = new Service();
 
         if($request->image){
@@ -117,7 +130,7 @@ class ServiceController extends Controller
             $service->thumbnail_image = $banner_name;
         }
 
-        $auth_user = Auth::guard('web')->user();
+        // $auth_user = Auth::guard('web')->user();
 
         $service->influencer_id = $auth_user->id;
         $service->category_id = $request->category_id;
@@ -146,6 +159,65 @@ class ServiceController extends Controller
         return redirect()->route('influencer.service.edit', ['service' => $service->id, 'lang_code' => front_lang()])->with($notification);
 
     }
+
+    //can create service
+    private function canCreateService($user_id){
+        $current_date = Carbon::now();
+        // dd($current_date);
+        $purchase_history = PurchaseHistory::where('provider_id', $user_id)
+                            ->where('status', 'active')
+                            // ->where('expiration_date', '>=', $current_date)
+                            ->orderBy('expiration_date', 'desc')
+                            ->first();
+        // dd($purchase_history);
+        if(!$purchase_history){
+            return response()->json(['message' => 'You have not purchased any subscription yet.'], 403);
+        }
+
+        if ($purchase_history->payment_method == 'Free') {
+            $servicesThisMonth = Service::where('influencer_id', $user_id)  //here influencer means business user
+                ->whereMonth('created_at', $current_date->month)
+                ->whereYear('created_at', $current_date->year)
+                ->count();
+
+                // dd($servicesThisMonth);
+
+            if ($servicesThisMonth >= $purchase_history->maximun_service) {
+                return response()->json(['message' => 'You have allows only' .$purchase_history->maximum_service  .' services per month'], 403);
+            }
+        }else{
+            $purchase_history = PurchaseHistory::where('provider_id', $user_id)
+                            ->where('status', 'active')
+                            ->where(function ($query) use ($current_date) {
+                                $query->where('expiration_date', '>=', $current_date->toDateString())
+                                      ->orWhere('expiration_date', 'lifetime');
+                            })
+                            ->orderBy('expiration_date', 'desc')
+                            ->first();
+            // dd($purchase_history);
+            if(!$purchase_history){
+                return response()->json(['message' => 'Your subscription has been expired.'], 403);
+            }
+            if($purchase_history->maximum_service == -1){
+                return response()->json(['message' => 'User can create a new service']);
+            }
+            $purchase_start_date = $purchase_history->created_at->toDateTimeString();
+            // dd($purchase_start_date);
+            $servicesThisMonth = Service::where('influencer_id', $user_id)  //here influencer means business user
+                ->when($purchase_start_date, function ($query) use ($purchase_start_date) {
+                    return $query->where('created_at', '>=', $purchase_start_date);
+                })
+                ->whereMonth('created_at', $current_date->month)
+                ->whereYear('created_at', $current_date->year)
+                ->count();
+            // dd($servicesThisMonth);
+            if ($servicesThisMonth >= $purchase_history->maximum_service) {
+                return response()->json(['message' => 'You have allows only' .$purchase_history->maximum_service  .' services per month'], 403);
+            }
+        }
+        return response()->json(['message' => 'User can create a new service']);
+    }
+
 
     public function edit(Request $request, $id)
     {
@@ -406,3 +478,4 @@ class ServiceController extends Controller
         return view('influencer.review_show', compact('review'));
     }
 }
+//OmarFaruk

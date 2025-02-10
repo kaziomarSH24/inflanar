@@ -79,30 +79,36 @@
 
                                     </div>
 
+                                    {{-- @dd($business_providers['user_type']) --}}
 
                                     <div class="form-group col-12">
                                         <label for="" id="businessLbl">{{__('admin.Select Business Provider')}} <span
                                                 class="text-danger">*</span></label>
                                         <label for="" id="influencerLbl" style="display: none">{{__('admin.Select Influencer')}} <span
                                                 class="text-danger">*</span></label>
+                                        @if ($business_providers['user_type'] == 'business')
                                         <div id="businessProviders">
                                             <select name="provider_id" id="" class="form-control select2 " data-type="business">
                                                 <option value="" >{{__('admin.Select')}}</option>
-                                                @foreach ($business_providers as $provider)
+
+                                                @foreach ($business_providers['users'] as $provider)
                                                 <option value="{{ $provider->id }}">{{ $provider->name }} - {{
                                                     $provider->phone }} - {{ $provider->email }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
+                                        @endif
+                                        @if ($influencers['user_type'] == 'influencer')
                                         <div id="influencerProviders" style="display: none">
-                                        <select name="provider_id"  class="form-control select2" style="display: none" data-type="influencer">
-                                            <option value="">{{__('admin.Select')}}</option>
-                                            @foreach ($influencers as $provider)
-                                            <option value="{{ $provider->id }}" >{{ $provider->name }} - {{
-                                                $provider->phone }} - {{ $provider->email }}</option>
-                                            @endforeach
-                                        </select>
-                                        </div>
+                                            <select name="influncer_id"  class="form-control select2" style="display: none" data-type="influencer">
+                                                <option value="">{{__('admin.Select')}}</option>
+                                                @foreach ($influencers['users'] as $provider)
+                                                <option value="{{ $provider->id }}" >{{ $provider->name }} - {{
+                                                    $provider->phone }} - {{ $provider->email }}</option>
+                                                @endforeach
+                                            </select>
+                                            </div>
+                                        @endif
                                     </div>
 
                                     <div class="form-group col-md-12">

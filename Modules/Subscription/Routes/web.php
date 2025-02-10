@@ -68,6 +68,7 @@ Route::group(['middleware' => ['XSS','DEMO']], function () {
         Route::get('/purchase-history',[ProviderPurchaseController::class, 'index'])->name('purchase-history');
         Route::get('/pending-plan-payment',[ProviderPurchaseController::class, 'pending_payment'])->name('pending-plan-payment');
         Route::get('/purchase-history-show/{id}',[ProviderPurchaseController::class, 'show'])->name('purchase-history-show');
+        
 
         Route::get('/payment-getway-setup',[PaymentGatewayController::class, 'index'])->name('payment-getway-setup');
 

@@ -20,6 +20,7 @@ use App\Models\RefundRequest;
 use App\Models\Review;
 use App\Rules\Captcha;
 use Hash, Image, File, Str;
+use Modules\Subscription\Entities\PurchaseHistory;
 
 class ProfileController extends Controller
 {
@@ -396,6 +397,23 @@ class ProfileController extends Controller
         $notification = trans('admin_validation.Message send successfully');
         $notification = array('messege'=>$notification,'alert-type'=>'success');
         return redirect()->back()->with($notification);
+    }
+
+    public function subscription_plan_show($id){
+        $user = Auth::guard('web')->user();
+        $plan = PurchaseHistory::where('provider_id', $user->id)->where('id', $id)->first();
+        if(!$plan)abort(404);
+        return view('profile.subscription_plan_show', ['plan' => $plan]);
+    }
+
+    public function subscription_plan(){
+        $user = Auth::guard('web')->user();
+        $plans = PurchaseHistory::where('provider_id', $user->id)
+                    ->where('type', 'influencer')
+                    ->orderBy('id','desc')
+                ->get();
+        // dd($plans);
+        return view('profile.subscription_plan', ['plans' => $plans]);
     }
 
 }

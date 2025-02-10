@@ -37,7 +37,7 @@ class PurchaseController extends Controller
         $user = Auth::guard('web')->user();
 
         $histories = PurchaseHistory::with('provider')->orderBy('id','desc')->where('provider_id', $user->id)->paginate(20);
-
+        // dd($histories);
         return view('subscription::user.provider.purchase_history', compact('histories','active_theme','user'));
     }
 
@@ -51,7 +51,6 @@ class PurchaseController extends Controller
                                     ->orderBy('id','desc')
                                     ->where('provider_id', $user->id)
                                     ->paginate(10);
-
         return view('subscription::user.provider.purchase_history', compact('histories','user'));
     }
 
@@ -394,6 +393,7 @@ class PurchaseController extends Controller
         $purchase->expiration = $subscription_plan->expiration_date;
         $purchase->expiration_date = $expiration_date;
         $purchase->maximum_service = $subscription_plan->maximum_service;
+        $purchase->type = $user->is_influencer == 'yes' ? 'business' : 'influencer'; //here influencer in business provider role and client in influencer role
         if($payment_status == 'success'){
             $purchase->status = 'active';
         }else{

@@ -17,6 +17,7 @@ class CheckInfluencer
     public function handle(Request $request, Closure $next): Response
     {
         $auth_user = Auth::guard('web')->user();
+        // if($auth_user->is_influencer == 'yes'){
         if($auth_user->is_influencer == 'yes'){
             return $next($request);
         }else{

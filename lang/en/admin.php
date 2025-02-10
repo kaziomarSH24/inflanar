@@ -931,5 +931,9 @@
   'Booking' => 'Booking',
   'Fees' => 'Fees',
   'Fees Amount' => 'Fees Amount',
+  'Subscription Plan For Influencer' => 'Subscription Plan For Influencer',
+  'Subscription Plan For Business Provider' => 'Subscription Plan For Business Provider',
+  'Business Provider' => 'Business Provider',
+  'Plan Type' => 'Plan Type',
 
 );

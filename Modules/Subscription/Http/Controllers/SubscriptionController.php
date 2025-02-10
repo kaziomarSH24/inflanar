@@ -25,9 +25,16 @@ class SubscriptionController extends Controller
 
     public function pricing_plan()
     {
-        $plans = SubscriptionPlan::where('status', 1)->orderBy('serial','asc')->get();
+        $business_plans = SubscriptionPlan::where('status', 1)
+                        ->where('type', 'business')
+                        ->orderBy('serial','asc')->get();
+        $influencer_plans = SubscriptionPlan::where('status', 1)
+                        ->where('type', 'influencer')
+                        ->orderBy('serial','asc')->get();
 
-        return view('subscription::pricing_plan', compact('plans'));
+        // dd($influencer_plans);
+
+        return view('subscription::pricing_plan', compact('business_plans','influencer_plans'));
     }
 
 
@@ -91,8 +98,9 @@ class SubscriptionController extends Controller
 
     public function store_subscription($user, $subscription_plan, $payment_gateway, $transaction, $payment_status, $bank_payment_proof = null){
         $purchase = new PurchaseHistory();
-
-        if($subscription_plan->expiration_date == 'monthly'){
+        if($subscription_plan->expiration_date == 'daily'){
+            $expiration_date = date('Y-m-d', strtotime('1 days'));
+        }elseif($subscription_plan->expiration_date == 'monthly'){
             $expiration_date = date('Y-m-d', strtotime('30 days'));
         }elseif($subscription_plan->expiration_date == 'yearly'){
             $expiration_date = date('Y-m-d', strtotime('365 days'));
@@ -117,7 +125,7 @@ class SubscriptionController extends Controller
         }else{
             $purchase->status = 'pending';
         }
-
+        $purchase->type = $user->is_influencer == 'yes' ? 'business' : 'influencer';
         $purchase->payment_method = $payment_gateway;
         $purchase->payment_status = $payment_status;
         $purchase->transaction = $transaction;

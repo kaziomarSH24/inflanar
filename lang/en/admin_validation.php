@@ -285,4 +285,6 @@
     'Plan Type is required' => 'Plan Type is required',
     'Provider is required' => 'Provider is required',
     'Plan is required' => 'Plan is required',
+    'Assign Successfully' => 'Assign Successfully',
+    'Please at first login in your account' => 'Please at first login in your account',
 );

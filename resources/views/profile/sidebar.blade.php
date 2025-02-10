@@ -80,6 +80,14 @@
                 </span>
                 <span class="inflanar-psidebar__title">{{__('admin.My Profile')}}</span>
             </a>
+            <a class="list-group-item {{ Route::is('user.subscription-plan') || Route::is('user.subscription_plan_show') ? 'active' : '' }}" href="{{ route('user.subscription-plan') }}">
+                <span class="inflanar-psidebar__icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.0001 0H4.00012C1.79098 0 0.00012207 1.79086 0.00012207 4V16C0.00012207 17.8642 1.27544 19.4306 3.00123 19.8743C3.32052 19.9563 3.65522 20 4.00012 20H16.0001C16.345 20 16.6797 19.9563 16.999 19.8743C18.7248 19.4306 20.0001 17.8642 20.0001 16V4C20.0001 1.79086 18.2093 0 16.0001 0ZM13.0001 7C13.0001 5.34315 11.657 4 10.0001 4C8.34327 4 7.00012 5.34315 7.00012 7C7.00012 8.65685 8.34327 10 10.0001 10C11.657 10 13.0001 8.65685 13.0001 7ZM5.15269 15.0155C5.70097 13.2824 7.66335 12 10.0001 12C12.3369 12 14.2993 13.2824 14.8475 15.0155C15.0141 15.5421 14.5524 16 14.0001 16H6.00012C5.44784 16 4.98611 15.5421 5.15269 15.0155Z"/>
+                    </svg>
+                </span>
+                <span class="inflanar-psidebar__title">{{__('admin.Subscription Plan')}}</span>
+            </a>
             <a class="list-group-item {{ Route::is('user.change-password') ? 'active' : '' }}" href="{{ route('user.change-password') }}">
                 <span class="inflanar-psidebar__icon">
                     <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">

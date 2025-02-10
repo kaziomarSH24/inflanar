@@ -42,8 +42,19 @@ class PurchaseController extends Controller
         // $plans = SubscriptionPlan::where('status', 1)->orderBy('serial','asc')->get();
 
         $business_providers = User::where('is_influencer','yes')->get(); //here influencer means business provider
-        $influencers = User::where('is_influencer','no')->get(); //client (normal user) means influencer
+
         // dd($influencers);
+        $business_providers = [
+            'user_type' => 'business',
+            'users' => $business_providers
+        ];
+
+        $influencers = User::where('is_influencer','no')->get(); //client (normal user) means influencer
+
+        $influencers = [
+            'user_type' => 'influencer',
+            'users' => $influencers
+        ];
 
         // return view('subscription::admin.assign_plan', compact('plans','providers'));
         return view('subscription::admin.assign_plan', compact('business_plans','influencer_plans','business_providers', 'influencers'));
@@ -51,15 +62,18 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'type' => 'required',
-            'provider_id' => 'required',
+            $request->type == 'business' ? 'provider_id' : 'influncer_id' => 'required',
             'plan_id' => 'required',
             'maximum_service' => 'required|numeric',  //If type is influencer then it will be maximum_applies
         ],[
             'type.required' => "User type is required",
             'maximum_service.required' => $request->type == 'influencer' ? 'Maximum applies is required' : 'Maximum service is required',
-            'provider_id.required' => trans('admin_validation.Provider is required'),
+            // 'provider_id.required' => trans('admin_validation.Provider is required'),
+            'provider_id.required' => 'Business Provider is required',
+            'influncer_id.required' => 'Influencer is required',
             'plan_id.required' => trans('admin_validation.Plan is required'),
         ]);
 
@@ -95,7 +109,7 @@ class PurchaseController extends Controller
 
         $purchase = new PurchaseHistory();
 
-        $purchase->provider_id = $request->provider_id;
+        $purchase->provider_id = $request->type == 'business' ? $request->provider_id : $request->influncer_id;
         $purchase->plan_id = $request->plan_id;
         $purchase->plan_name = $plan->plan_name;
         $purchase->plan_price = $plan->plan_price;
