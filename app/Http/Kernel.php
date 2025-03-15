@@ -72,6 +72,7 @@ class Kernel extends HttpKernel
         'XSS' => \App\Http\Middleware\XSSProtection::class,
         'DEMO' => \App\Http\Middleware\DemoHandler::class,
         'ApiLangSession' => \App\Http\Middleware\ApiLangSession::class,
+        'CheckAuthUser' => \App\Http\Middleware\CheckAuthUser::class,
 
     ];
 }

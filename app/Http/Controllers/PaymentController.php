@@ -34,6 +34,7 @@ use Modules\PaymentGateway\Entities\MercadoPagoPayment;
 
 use Modules\PaymentGateway\Http\Controllers\PaymentGatewayController;
 use App\Models\MultiCurrency;
+use Carbon\Carbon;
 use MercadoPago\Subscription;
 use Modules\Subscription\Entities\ProviderStripe;
 use Modules\Subscription\Entities\ProviderRazorpay;
@@ -43,6 +44,7 @@ use Modules\Subscription\Entities\ProviderMollie;
 use Modules\Subscription\Entities\ProviderInstamojo;
 use Modules\Subscription\Entities\ProviderBankHandcash;
 use Modules\Subscription\Entities\ProviderPaypal;
+use Modules\Subscription\Entities\PurchaseHistory;
 use Modules\Subscription\Entities\SubscriptionFee;
 
 class PaymentController extends Controller
@@ -210,9 +212,9 @@ class PaymentController extends Controller
                 $iyzico = IyzicoPayment::first();
                 $mercado = MercadoPagoPayment::first();
             }
-            $provider_stripe['image'] = $stripe->image;
+            // $provider_stripe['image'] = $stripe->image;
             // dd($booking_info);
-
+            // dd($provider_stripe);
             return view('subscription::payment', [
                 'service' => $service,
                 'booking_info' => $booking_info,
@@ -414,6 +416,13 @@ class PaymentController extends Controller
         $stripe = StripePayment::first();
         $payable_amount = round(($booking_info->total - $coupon_discount) * $stripe->currency->currency_rate,2);
 
+        //check can create order
+        $response = $this->canOrder($user->id);
+        if($response->status() == 403 ){
+            $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
+            return redirect()->back()->with($notification);
+        }
+
         /**
         * new code added provider stripe
         */
@@ -437,12 +446,22 @@ class PaymentController extends Controller
     }
 
     public function pay_via_razorpay(Request $request, $slug){
+
         $razorpay = RazorpayPayment::first();
         $input = $request->all();
         $api = new Api($razorpay->key,$razorpay->secret_key);
         $payment = $api->payment->fetch($input['razorpay_payment_id']);
         if(count($input)  && !empty($input['razorpay_payment_id'])) {
             try {
+                $user = Auth::guard('web')->user();
+                /**new code added */
+                //check can create order
+                $response = $this->canOrder($user->id);
+                if($response->status() == 403 ){
+                    $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
+                    return redirect()->back()->with($notification);
+                }
+                //================
                 $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount'=>$payment['amount']));
                 $payId = $response->id;
 
@@ -484,6 +503,16 @@ class PaymentController extends Controller
 
     public function pay_via_flutterwave(Request $request, $slug){
 
+        /**new code added */
+                //check can create order
+                $user = Auth::guard('web')->user();
+                $response = $this->canOrder($user->id);
+                if($response->status() == 403 ){
+                    $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
+                    return redirect()->back()->with($notification);
+                }
+      //================================================================
+
         $flutterwave = Flutterwave::first();
         $curl = curl_init();
         $tnx_id = $request->tnx_id;
@@ -524,7 +553,7 @@ class PaymentController extends Controller
                 return response()->json(['status' => 'faild' , 'message' => $notification]);
             }
 
-            $user = Auth::guard('web')->user();
+
 
             $influencer_id = $service->influencer_id;
             $client_id = $user->id;
@@ -540,6 +569,16 @@ class PaymentController extends Controller
     }
 
     public function pay_via_payStack(Request $request, $slug){
+
+        /**new code added */
+                //check can create order
+                $user = Auth::guard('web')->user();
+                $response = $this->canOrder($user->id);
+                if($response->status() == 403 ){
+                    $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
+                    return redirect()->back()->with($notification);
+                }
+                //================
 
         $paystack = PaystackAndMollie::first();
 
@@ -582,7 +621,7 @@ class PaymentController extends Controller
                 return response()->json(['status' => 'faild' , 'message' => $notification]);
             }
 
-            $user = Auth::guard('web')->user();
+
 
             $influencer_id = $service->influencer_id;
             $client_id = $user->id;
@@ -653,6 +692,16 @@ class PaymentController extends Controller
 
     public function mollie_payment_success(Request $request){
 
+        /**new code added */
+                //check can create order
+                $user = Auth::guard('web')->user();
+                $response = $this->canOrder($user->id);
+                if($response->status() == 403 ){
+                    $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
+                    return redirect()->back()->with($notification);
+                }
+                //================
+
         $mollie = PaystackAndMollie::first();
         $mollie_api_key = $mollie->mollie_key;
         Mollie::api()->setApiKey($mollie_api_key);
@@ -673,7 +722,7 @@ class PaymentController extends Controller
                 return redirect()->route('booking-service', $current_slug)->with($notification);
             }
 
-            $user = Auth::guard('web')->user();
+            // $user = Auth::guard('web')->user();
 
             $influencer_id = $service->influencer_id;
             $client_id = $user->id;
@@ -713,6 +762,15 @@ class PaymentController extends Controller
         }
 
         $user = Auth::guard('web')->user();
+
+        /**new code added */
+                //check can create order
+                $response = $this->canOrder($user->id);
+                if($response->status() == 403 ){
+                    $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
+                    return redirect()->back()->with($notification);
+                }
+                //================
 
         $influencer_id = $service->influencer_id;
         $client_id = $user->id;
@@ -769,6 +827,15 @@ class PaymentController extends Controller
     }
 
     public function instamojo_response(Request $request){
+
+        /**new code added */
+                //check can create order
+                $response = $this->canOrder($user->id);
+                if($response->status() == 403 ){
+                    $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
+                    return redirect()->back()->with($notification);
+                }
+                //================================================================
 
         $input = $request->all();
         $instamojoPayment = InstamojoPayment::first();
@@ -845,6 +912,13 @@ class PaymentController extends Controller
 
     public function create_order($user, $service, $booking_info, $influencer_id, $client_id, $payment_method, $payment_status, $tnx_info){
 
+        //new code added
+        $response = $this->canOrder($client_id);
+        // dd($response);
+        //check subscription plan purchase or not
+        $PurchaseHistory = PurchaseHistory::where('provider_id',$client_id)->where('status','active')->first();
+
+        // dd($PurchaseHistory);
         $additional_services = array();
 
         if($booking_info->ids){
@@ -896,6 +970,8 @@ class PaymentController extends Controller
             'fees' => $influencer_fees->fees,
         ];
         //=============
+
+
 
         $order = new Order();
         $order->order_id = substr(rand(0,time()),0,10);
@@ -953,6 +1029,73 @@ class PaymentController extends Controller
         Session::forget('booking_info');
 
         return $order;
+    }
+
+    //can create service
+    private function canOrder($user_id){
+        $current_date = Carbon::now();
+        // dd($current_date);
+       $purchase_history = PurchaseHistory::where('provider_id', $user_id)
+                            ->where('status', 'active')
+                            ->where('expiration_date', '>=', $current_date)
+                            ->orderBy('expiration_date', 'desc')
+                            ->first();
+        // dd($purchase_history);
+        if(!$purchase_history){
+            //user can order 5 in a day
+          $orderToday = Order::where('client_id', $user_id)
+                ->whereDate('created_at', $current_date)
+                ->count();
+            // dd($orderToday <= 5);
+            if ($orderToday >= 5) {
+                return response()->json(['message' => 'You have allows only 5 orders per day'], 403);
+            }else{
+                return response()->json(['message' => 'User can place a new order']);
+            }
+        }
+
+        if ($purchase_history->payment_method == 'Free') {
+            $orderThisMonth = Order::where('client_id', $user_id)  //here client means influencer
+                ->whereMonth('created_at', $current_date->month)
+                ->whereYear('created_at', $current_date->year)
+                ->count();
+
+                // dd($servicesThisMonth);
+
+            if ($orderThisMonth >= $purchase_history->maximun_service) {
+                return response()->json(['message' => 'You have allows only' .$purchase_history->maximum_service  .' services per month'], 403);
+            }
+        }else{
+            $purchase_history = PurchaseHistory::where('provider_id', $user_id)
+                            ->where('status', 'active')
+                            ->where(function ($query) use ($current_date) {
+                                $query->where('expiration_date', '>=', $current_date->toDateString())
+                                      ->orWhere('expiration_date', 'lifetime');
+                            })
+                            ->orderBy('expiration_date', 'desc')
+                            ->first();
+            // dd($purchase_history);
+            if(!$purchase_history){
+                return response()->json(['message' => 'Your subscription has been expired.'], 403);
+            }
+            if($purchase_history->maximum_service == -1){
+                return response()->json(['message' => 'User can place a new order']);
+            }
+            $purchase_start_date = $purchase_history->created_at->toDateTimeString();
+            // dd($purchase_start_date);
+            $orderThisMonth = Order::where('client_id', $user_id)  //here influencer means business user
+                ->when($purchase_start_date, function ($query) use ($purchase_start_date) {
+                    return $query->where('created_at', '>=', $purchase_start_date);
+                })
+                ->whereMonth('created_at', $current_date->month)
+                ->whereYear('created_at', $current_date->year)
+                ->count();
+            // dd($servicesThisMonth);
+            if ($orderThisMonth >= $purchase_history->maximum_service) {
+                return response()->json(['message' => 'You have allows only' .$purchase_history->maximum_service  .' services per month'], 403);
+            }
+        }
+        return response()->json(['message' => 'User can place a new order']);
     }
 
     public function pay_with_grabpay($slug){
@@ -1197,6 +1340,16 @@ class PaymentController extends Controller
 
     public function payment_addon_success(){
 
+        /**new code added */
+                //check can create order
+                $user = Auth::guard('web')->user();
+                $response = $this->canOrder($user->id);
+                if($response->status() == 403 ){
+                    $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
+                    return redirect()->back()->with($notification);
+                }
+                //================
+
         $after_success_gateway = Session::get('after_success_gateway');
         $after_success_transaction = Session::get('after_success_transaction');
 
@@ -1214,7 +1367,7 @@ class PaymentController extends Controller
             return redirect()->route('booking-service', $current_slug)->with($notification);
         }
 
-        $user = Auth::guard('web')->user();
+        // $user = Auth::guard('web')->user();
 
         $influencer_id = $service->influencer_id;
         $client_id = $user->id;

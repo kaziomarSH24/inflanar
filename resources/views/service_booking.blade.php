@@ -272,7 +272,7 @@ $tags .= $service_tag->value.', ';
                             </div>
 
                             <div class="inflanar-package-info__single">
-                                <p><span><b>{{__('admin.Fees')}}</b></span> <span>
+                                <p><span><b>{{__('admin.Processing Fees')}}</b></span> <span>
                                     <b class="fees" id="fees" data-fees="{{ $fees->fees }}" data-fees-type="{{ $fees->fees_type }}">
                                             {{ $fees->fees_type == 'percentage' ? $fees->fees . '%' :
                                             currency($fees->fees) }}
@@ -523,6 +523,8 @@ $tags .= $service_tag->value.', ';
         $("#input_total").val(total_price);
 
     }
-
+    window.onload = function() {
+        document.getElementById("agree_fees").checked = false;
+    }
 </script>
 @endsection

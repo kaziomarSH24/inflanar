@@ -227,7 +227,9 @@ class ServiceController extends Controller
 
         $translate = ServiceTranslation::where(['service_id' => $id, 'lang_code' => $request->lang_code])->first();
 
-        return view('influencer.service_edit', compact('categories','service','translate'));
+        $influencer_subscription_fees = SubscriptionFee::where('user_type', 'influencer')->first();
+
+        return view('influencer.service_edit', compact('categories','service','translate','influencer_subscription_fees'));
     }
 
     public function update(Request $request, $id)

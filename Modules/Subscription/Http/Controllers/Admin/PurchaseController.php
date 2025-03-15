@@ -12,12 +12,17 @@ use Modules\Subscription\Entities\SubscriptionPlan;
 use Modules\Subscription\Entities\PurchaseHistory;
 use App\Models\Setting;
 use App\Models\User;
+use Illuminate\Pagination\Paginator;
 
 class PurchaseController extends Controller
 {
 
     public function index()
     {
+        //bootstrap pagination
+        Paginator::useBootstrap();
+
+
         $histories = PurchaseHistory::with('provider')->orderBy('id','desc')->paginate(20);
 
         return view('subscription::admin.purchase_history', compact('histories'));

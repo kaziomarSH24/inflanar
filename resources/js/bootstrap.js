@@ -24,8 +24,7 @@ window.Pusher = Pusher;
 let my_name = 'ibrahim name';
 
 
-let APP_URL =
-    import.meta.env.VITE_APP_URL
+let APP_URL = import.meta.env.VITE_APP_URL
 APP_URL = `${APP_URL}/broadcasting/auth`;
 
 window.Echo = new Echo({

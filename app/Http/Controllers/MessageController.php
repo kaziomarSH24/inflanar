@@ -31,6 +31,7 @@ class MessageController extends Controller
 
     public function send_message_to_provider(Request $request){
 
+        // return $request->all();
         $buyer = Auth::guard('web')->user();
 
         $message = new Message();
@@ -43,17 +44,17 @@ class MessageController extends Controller
         $message->service_id = $request->service_id ? $request->service_id : 0;
         $message->save();
 
+        // return $message;
         $provider = User::find($request->provider_id);
 
         $messages =  Message::with('service')->where(['provider_id' => $provider->id, 'buyer_id' => $buyer->id])->get();
-
+        // return $messages;
         $data = array([
             'buyer_id' => $buyer->id,
             'message_id' => $message->id
         ]);
-
+        // return $data;
         event(new LiveChat($provider, $data));
-
         return view('chat_box')->with(['messages' => $messages, 'provider' => $provider, 'buyer' => $buyer]);
 
 

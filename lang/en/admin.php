@@ -935,5 +935,9 @@
   'Subscription Plan For Business Provider' => 'Subscription Plan For Business Provider',
   'Business Provider' => 'Business Provider',
   'Plan Type' => 'Plan Type',
+  'Processing Fees' => 'Processing Fees',
+  'Unlimited Service Upload' => 'Unlimited Service Upload',
+  'Unlimited' => 'Unlimited',
+  'Booking Applies'=> 'Booking Applies',
 
 );

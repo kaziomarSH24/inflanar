@@ -133,11 +133,17 @@ class PurchaseController extends Controller
         $transaction = $responseData['balance_transaction'];
 
         $user = Auth::guard('web')->user();
+        // dd($user);
         $this->store_subscription($user, $plan, 'Stripe', $transaction, 'success');
 
         $notification = trans('admin_validation.Enrolled Successfully');
         $notification = array('messege'=>$notification,'alert-type'=>'success');
-        return redirect()->route('influencer.purchase-history')->with($notification);
+
+        if($user->is_influencer == 'yes'){
+            return redirect()->route('influencer.purchase-history')->with($notification);
+        }else{
+            return redirect()->route('user.subscription-plan')->with($notification);
+        }
 
     }
 

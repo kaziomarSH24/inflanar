@@ -821,7 +821,7 @@
             $("#chat-form").on("submit", function(e){
 
                 e.preventDefault();
-
+                console.log($('#chat-form').serialize());
                 var isDemo = "{{ env('APP_MODE') }}"
                 if(isDemo == 'DEMO'){
                     toastr.error('This Is Demo Version. You Can Not Change Anything');
@@ -835,9 +835,11 @@
                     data: $('#chat-form').serialize(),
                     url: "{{ url('user/send-message-to-provider') }}",
                     success:function(response){
+                        console.log(response);
                         $(".wsus__message_box_text").html(response);
                         $("#provider_message").val('');
                         scrollToBottomFunc();
+                        // console.log(response);
                     },
                     error:function(err){
                     }

@@ -411,7 +411,7 @@ class ProfileController extends Controller
         $plans = PurchaseHistory::where('provider_id', $user->id)
                     ->where('type', 'influencer')
                     ->orderBy('id','desc')
-                ->get();
+                ->paginate(10);
         // dd($plans);
         return view('profile.subscription_plan', ['plans' => $plans]);
     }

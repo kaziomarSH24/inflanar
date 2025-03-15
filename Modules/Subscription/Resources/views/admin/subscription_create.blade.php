@@ -73,8 +73,7 @@
                                                 class="fa fa-info-circle text--primary"
                                                 title="For unlimited service use(-1)"> <span
                                                     class="text-danger">*</span></label>
-                                        <label for="" id="maxApplies" style="display: none">{{__('admin.Maximum
-                                            Applies')}} <span data-toggle="tooltip" data-placement="top"
+                                        <label for="" id="maxApplies" style="display: none">{{__('admin.Maximum Applies')}} <span data-toggle="tooltip" data-placement="top"
                                                 class="fa fa-info-circle text--primary"
                                                 title="For unlimited applies use(-1)"> <span
                                                     class="text-danger">*</span></label>

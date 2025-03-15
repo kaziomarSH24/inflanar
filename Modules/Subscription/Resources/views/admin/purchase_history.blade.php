@@ -82,9 +82,7 @@
                         @if($histories->hasPages())
 
                             <div class="card-footer">
-
-                                {{ $histories->links('admin.partials.paginate') }}
-
+                                {{ $histories->links() }}
                             </div>
 
                          @endif

@@ -130,6 +130,7 @@
                         type:"get",
                         url: "{{ url('influencer/load-chat-box/') }}" + "/" + sender_buyer_id,
                         success:function(response){
+
                             $(".chat-content").html(response)
                             scrollToBottomFunc();
                         },

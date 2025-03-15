@@ -68,7 +68,7 @@ Route::group(['middleware' => ['XSS','DEMO']], function () {
         Route::get('/purchase-history',[ProviderPurchaseController::class, 'index'])->name('purchase-history');
         Route::get('/pending-plan-payment',[ProviderPurchaseController::class, 'pending_payment'])->name('pending-plan-payment');
         Route::get('/purchase-history-show/{id}',[ProviderPurchaseController::class, 'show'])->name('purchase-history-show');
-        
+
 
         Route::get('/payment-getway-setup',[PaymentGatewayController::class, 'index'])->name('payment-getway-setup');
 
@@ -89,7 +89,7 @@ Route::group(['middleware' => ['XSS','DEMO']], function () {
         Route::put('/store-bank-handcash-gateway',[PaymentGatewayController::class, 'store_bank_handcash_gateway'])->name('store-bank-handcash-gateway');
 
 
-    });
+    }); //influencer middleware end
 
         Route::get('/user-subscription-plan',[ProviderPurchaseController::class, 'subscription_plan'])->name('subscription-plan-user');
         Route::get('/subscription-payment/{id}',[FrontendSubscriptionController::class, 'subscription_payment'])->name('subscription-payment');
