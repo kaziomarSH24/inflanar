@@ -21,6 +21,7 @@ use App\Models\Review;
 use App\Rules\Captcha;
 use Hash, Image, File, Str;
 use Modules\Subscription\Entities\PurchaseHistory;
+use Modules\Subscription\Entities\SubscriptionPlan;
 
 class ProfileController extends Controller
 {
@@ -401,9 +402,12 @@ class ProfileController extends Controller
 
     public function subscription_plan_show($id){
         $user = Auth::guard('web')->user();
-        $plan = PurchaseHistory::where('provider_id', $user->id)->where('id', $id)->first();
-        if(!$plan)abort(404);
-        return view('profile.subscription_plan_show', ['plan' => $plan]);
+        $plans = PurchaseHistory::where('provider_id', $user->id)->where('id', $id)->first();
+        $influencer_plans = SubscriptionPlan::where('status', 1)
+            ->where('type', 'influencer')
+            ->orderBy('serial', 'asc')->get();
+        if(!$plans)abort(404);
+        return view('profile.subscription_plan_show', ['plans' => $plans, 'influencer_plans' => $influencer_plans]);
     }
 
     public function subscription_plan(){

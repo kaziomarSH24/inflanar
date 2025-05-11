@@ -188,8 +188,12 @@
                                                 <li class="inflanar-dflex">
                                                     <h4 class="inflanar-profile-info__title">{{__('admin.Fees')}}:</h4>
                                                     <p class="inflanar-profile-info__text">
+                                                        {{-- @dd($order) --}}
 
-                                                        {{ $order->fees->fees_type == 'fixed' ? currency($order->fees->fees) : $order->fees->fees.'%' }}
+
+                                                        @if ($order->fees)
+                                                            {{ $order->fees->fees_type == 'fixed' ? currency($order->fees->fees) : $order->fees->fees.'%' }}
+                                                        @endif
 
                                                     </p>
                                                 </li>

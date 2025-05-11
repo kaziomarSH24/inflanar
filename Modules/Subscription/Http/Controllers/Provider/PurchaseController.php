@@ -36,9 +36,9 @@ class PurchaseController extends Controller
 
         $user = Auth::guard('web')->user();
 
-        $histories = PurchaseHistory::with('provider')->orderBy('id','desc')->where('provider_id', $user->id)->paginate(20);
+        $histories = PurchaseHistory::with('provider')->orderBy('id', 'desc')->where('provider_id', $user->id)->paginate(20);
         // dd($histories);
-        return view('subscription::user.provider.purchase_history', compact('histories','active_theme','user'));
+        return view('subscription::user.provider.purchase_history', compact('histories', 'active_theme', 'user'));
     }
 
 
@@ -48,10 +48,10 @@ class PurchaseController extends Controller
         $user = Auth::guard('web')->user();
 
         $histories = PurchaseHistory::with('provider')
-                                    ->orderBy('id','desc')
-                                    ->where('provider_id', $user->id)
-                                    ->paginate(10);
-        return view('subscription::user.provider.purchase_history', compact('histories','user'));
+            ->orderBy('id', 'desc')
+            ->where('provider_id', $user->id)
+            ->paginate(10);
+        return view('subscription::user.provider.purchase_history', compact('histories', 'user'));
     }
 
     public function pending_payment()
@@ -60,12 +60,12 @@ class PurchaseController extends Controller
         $user = Auth::guard('web')->user();
 
         $histories = PurchaseHistory::with('provider')
-                                    ->orderBy('id', 'desc')
-                                    ->where('payment_status', 'pending')
-                                    ->where('provider_id', $user->id)
-                                    ->paginate(10);
+            ->orderBy('id', 'desc')
+            ->where('payment_status', 'pending')
+            ->where('provider_id', $user->id)
+            ->paginate(10);
 
-        return view('subscription::user.provider.purchase_history', compact('histories','user'));
+        return view('subscription::user.provider.purchase_history', compact('histories', 'user'));
     }
 
     public function show($id)
@@ -74,11 +74,15 @@ class PurchaseController extends Controller
         $user = Auth::guard('web')->user();
 
         $history = PurchaseHistory::with('provider')->where('id', $id)->first();
-
-        return view('subscription::user.provider.purchase_history_show', compact('history','user'));
+        // dd($history);
+        $business_plans = SubscriptionPlan::where('status', 1)
+            ->where('type', 'business')
+            ->orderBy('serial', 'asc')->get();
+        return view('subscription::user.provider.purchase_history_show', compact('history', 'user', 'business_plans'));
     }
 
-    public function subscription_payment($id){
+    public function subscription_payment($id)
+    {
 
         $this->translator();
 
@@ -86,9 +90,9 @@ class PurchaseController extends Controller
 
         $user = Auth::guard('web')->user();
 
-        $plan = SubscriptionPlan::where('status', 1)->orderBy('serial','asc')->where('id', $id)->first();
+        $plan = SubscriptionPlan::where('status', 1)->orderBy('serial', 'asc')->where('id', $id)->first();
 
-        $bank_payment = BankPayment::select('id','status','account_info','image')->first();
+        $bank_payment = BankPayment::select('id', 'status', 'account_info', 'image')->first();
         $stripe = StripePayment::first();
         $paypal = PaypalPayment::first();
 
@@ -99,17 +103,18 @@ class PurchaseController extends Controller
         $instamojo = InstamojoPayment::first();
         $sslcommerzPayment = SslcommerzPayment::first();
 
-        return view('subscription::user.provider.subscription_payment', compact('sslcommerzPayment','active_theme','plan','stripe','paypal','razorpay','flutterwave','paystack','mollie','instamojo','bank_payment','user'));
+        return view('subscription::user.provider.subscription_payment', compact('sslcommerzPayment', 'active_theme', 'plan', 'stripe', 'paypal', 'razorpay', 'flutterwave', 'paystack', 'mollie', 'instamojo', 'bank_payment', 'user'));
     }
 
 
 
 
-    public function stripe_payment(Request $request, $id){
+    public function stripe_payment(Request $request, $id)
+    {
 
-        if(env('APP_MODE') == 'DEMO'){
+        if (env('APP_MODE') == 'DEMO') {
             $notification = trans('This Is Demo Version. You Can Not Change Anything');
-            $notification=array('messege'=>$notification,'alert-type'=>'error');
+            $notification = array('messege' => $notification, 'alert-type' => 'error');
             return redirect()->back()->with($notification);
         }
 
@@ -137,74 +142,73 @@ class PurchaseController extends Controller
         $this->store_subscription($user, $plan, 'Stripe', $transaction, 'success');
 
         $notification = trans('admin_validation.Enrolled Successfully');
-        $notification = array('messege'=>$notification,'alert-type'=>'success');
+        $notification = array('messege' => $notification, 'alert-type' => 'success');
 
-        if($user->is_influencer == 'yes'){
+        if ($user->is_influencer == 'yes') {
             return redirect()->route('influencer.purchase-history')->with($notification);
-        }else{
+        } else {
             return redirect()->route('user.subscription-plan')->with($notification);
         }
-
     }
 
-    public function razorpay_payment(Request $request, $id){
+    public function razorpay_payment(Request $request, $id)
+    {
 
-        if(env('APP_MODE') == 'DEMO'){
+        if (env('APP_MODE') == 'DEMO') {
             $notification = trans('This Is Demo Version. You Can Not Change Anything');
-            $notification=array('messege'=>$notification,'alert-type'=>'error');
+            $notification = array('messege' => $notification, 'alert-type' => 'error');
             return redirect()->back()->with($notification);
         }
 
         $razorpay = RazorpayPayment::first();
 
         $input = $request->all();
-        $api = new Api($razorpay->key,$razorpay->secret_key);
+        $api = new Api($razorpay->key, $razorpay->secret_key);
         $payment = $api->payment->fetch($input['razorpay_payment_id']);
-        if(count($input)  && !empty($input['razorpay_payment_id'])) {
+        if (count($input)  && !empty($input['razorpay_payment_id'])) {
             try {
-                $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount'=>$payment['amount']));
+                $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount' => $payment['amount']));
                 $transaction = $request->razorpay_payment_id;
 
-                $user=Auth::guard('web')->user();
+                $user = Auth::guard('web')->user();
 
                 $plan = SubscriptionPlan::where('status', 1)->where('id', $id)->first();
 
                 $this->store_subscription($user, $plan, 'Razorpay', $transaction, 'success');
 
                 $notification = trans('admin_validation.Enrolled Successfully');
-                $notification = array('messege'=>$notification,'alert-type'=>'success');
+                $notification = array('messege' => $notification, 'alert-type' => 'success');
                 return redirect()->route('provider.purchase-history')->with($notification);
-
             } catch (Exception $e) {
                 $notification = trans('admin_validation.Something went wrong');
-                $notification = array('messege'=>$notification,'alert-type'=>'error');
+                $notification = array('messege' => $notification, 'alert-type' => 'error');
                 return redirect()->back()->with($notification);
             }
-        }else{
+        } else {
             $notification = trans('admin_validation.Something went wrong');
-            $notification = array('messege'=>$notification,'alert-type'=>'error');
+            $notification = array('messege' => $notification, 'alert-type' => 'error');
             return redirect()->back()->with($notification);
         }
-
     }
 
-    public function mollie_payment($id){
+    public function mollie_payment($id)
+    {
 
-        if(env('APP_MODE') == 'DEMO'){
+        if (env('APP_MODE') == 'DEMO') {
             $notification = trans('This Is Demo Version. You Can Not Change Anything');
-            $notification=array('messege'=>$notification,'alert-type'=>'error');
+            $notification = array('messege' => $notification, 'alert-type' => 'error');
             return redirect()->back()->with($notification);
         }
 
-       $mollie = PaystackAndMollie::first();
+        $mollie = PaystackAndMollie::first();
 
-        $user=Auth::guard('web')->user();
+        $user = Auth::guard('web')->user();
 
         $plan = SubscriptionPlan::where('status', 1)->where('id', $id)->first();
         $plan_price = $plan->plan_price;
 
         $payableAmount = round($plan_price * $mollie->mollie_currency->currency_rate);
-        $payableAmount= sprintf('%0.2f', $payableAmount);
+        $payableAmount = sprintf('%0.2f', $payableAmount);
 
         $mollie_api_key = $mollie->mollie_key;
         $currency = strtoupper($mollie->mollie_currency->currency_code);
@@ -212,52 +216,53 @@ class PurchaseController extends Controller
         $payment = Mollie::api()->payments()->create([
             'amount' => [
                 'currency' => $currency,
-                'value' => ''.$payableAmount.'',
+                'value' => '' . $payableAmount . '',
             ],
             'description' => 'Payment',
             'redirectUrl' => route('subscription.mollie-success-payment'),
         ]);
 
         $payment = Mollie::api()->payments()->get($payment->id);
-        session()->put('payment_id',$payment->id);
-        session()->put('plan_id',$id);
+        session()->put('payment_id', $payment->id);
+        session()->put('plan_id', $id);
         return redirect($payment->getCheckoutUrl(), 303);
     }
 
-    public function mollie_success_payment(Request $request){
+    public function mollie_success_payment(Request $request)
+    {
         $mollie = PaystackAndMollie::first();
         $mollie_api_key = $mollie->mollie_key;
         Mollie::api()->setApiKey($mollie_api_key);
         $payment = Mollie::api()->payments->get(session()->get('payment_id'));
-        if ($payment->isPaid()){
+        if ($payment->isPaid()) {
 
             $plan_id = Session::get('plan_id');
             $payment_id = Session::get('payment_id');
 
             $transaction = $payment_id;
 
-            $user=Auth::guard('web')->user();
+            $user = Auth::guard('web')->user();
 
             $plan = SubscriptionPlan::where('status', 1)->where('id', $plan_id)->first();
 
             $this->store_subscription($user, $plan, 'Mollie', $transaction, 'success');
 
             $notification = trans('admin_validation.Enrolled Successfully');
-            $notification = array('messege'=>$notification,'alert-type'=>'success');
+            $notification = array('messege' => $notification, 'alert-type' => 'success');
             return redirect()->route('influencer.purchase-history')->with($notification);
-
-        }else{
+        } else {
             $notification = trans('admin_validation.Something went wrong');
-            $notification = array('messege'=>$notification,'alert-type'=>'success');
+            $notification = array('messege' => $notification, 'alert-type' => 'success');
             return redirect()->back()->with($notification);
         }
     }
 
-    public function paystack_payment(Request $request){
+    public function paystack_payment(Request $request)
+    {
 
-        if(env('APP_MODE') == 'DEMO'){
+        if (env('APP_MODE') == 'DEMO') {
             $notification = trans('This Is Demo Version. You Can Not Change Anything');
-            $notification=array('messege'=>$notification,'alert-type'=>'error');
+            $notification = array('messege' => $notification, 'alert-type' => 'error');
             return redirect()->back()->with($notification);
         }
 
@@ -272,8 +277,8 @@ class PurchaseController extends Controller
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_SSL_VERIFYHOST =>0,
-            CURLOPT_SSL_VERIFYPEER =>0,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
@@ -286,31 +291,31 @@ class PurchaseController extends Controller
         $err = curl_error($curl);
         curl_close($curl);
         $final_data = json_decode($response);
-        if($final_data->status == true) {
-            $user=Auth::guard('web')->user();
+        if ($final_data->status == true) {
+            $user = Auth::guard('web')->user();
 
             $plan = SubscriptionPlan::where('status', 1)->where('id', $request->plan_id)->first();
 
             $this->store_subscription($user, $plan, 'Paystack', $transaction, 'success');
 
             return response()->json(['status' => 'success', 'message' => 'Enrolled Successfully']);
-        }else{
+        } else {
             return response()->json(['status' => 'error', 'message' => 'Something Goes Wrong']);
         }
-
     }
 
-    public function instamojo_payment($id){
+    public function instamojo_payment($id)
+    {
 
-        if(env('APP_MODE') == 'DEMO'){
+        if (env('APP_MODE') == 'DEMO') {
             $notification = trans('This Is Demo Version. You Can Not Change Anything');
-            $notification=array('messege'=>$notification,'alert-type'=>'error');
+            $notification = array('messege' => $notification, 'alert-type' => 'error');
             return redirect()->back()->with($notification);
         }
 
         $instamojoPayment = InstamojoPayment::first();
         $plan = SubscriptionPlan::where('status', 1)->where('id', $id)->first();
-        $user=Auth::guard('web')->user();
+        $user = Auth::guard('web')->user();
         $plan_price = $plan->plan_price;
         $payableAmount = round($plan_price * $instamojoPayment->currency_rate);
         $price = $payableAmount;
@@ -318,7 +323,7 @@ class PurchaseController extends Controller
         $api_key = $instamojoPayment->api_key;
         $auth_token = $instamojoPayment->auth_token;
 
-        if($environment == 'Sandbox') {
+        if ($environment == 'Sandbox') {
             $url = 'https://test.instamojo.com/api/1.1/';
         } else {
             $url = 'https://www.instamojo.com/api/1.1/';
@@ -326,18 +331,23 @@ class PurchaseController extends Controller
 
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, $url.'payment-requests/');
+        curl_setopt($ch, CURLOPT_URL, $url . 'payment-requests/');
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-        curl_setopt($ch, CURLOPT_HTTPHEADER,
-            array("X-Api-Key:$api_key",
-                "X-Auth-Token:$auth_token"));
-        $payload = Array(
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
+                "X-Api-Key:$api_key",
+                "X-Auth-Token:$auth_token"
+            )
+        );
+        $payload = array(
             'purpose' => 'Payment',
             'amount' => $price,
             'phone' => '918160651749',
-            'buyer_name' => $user->fname.' '.$user->lname,
+            'buyer_name' => $user->fname . ' ' . $user->lname,
             'redirect_url' => route('influencer.purchase-history'),
             'send_email' => true,
             'webhook' => 'http://www.example.com/webhook/',
@@ -350,16 +360,17 @@ class PurchaseController extends Controller
         $response = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response);
-        session()->put('plan_id',$id);
+        session()->put('plan_id', $id);
         return redirect($response->payment_request->longurl);
     }
 
 
-    public function bank_payment(Request $request, $id){
+    public function bank_payment(Request $request, $id)
+    {
 
-        if(env('APP_MODE') == 'DEMO'){
+        if (env('APP_MODE') == 'DEMO') {
             $notification = trans('This Is Demo Version. You Can Not Change Anything');
-            $notification=array('messege'=>$notification,'alert-type'=>'error');
+            $notification = array('messege' => $notification, 'alert-type' => 'error');
             return redirect()->back()->with($notification);
         }
 
@@ -372,22 +383,23 @@ class PurchaseController extends Controller
         $this->store_subscription($user, $plan, 'Bank Payment', $transaction, 'pending');
 
         $notification = trans('admin_validation.Enrolled Successfully');
-        $notification = array('messege'=>$notification,'alert-type'=>'success');
+        $notification = array('messege' => $notification, 'alert-type' => 'success');
         return redirect()->back()->with($notification);
     }
 
-    public function store_subscription($user, $subscription_plan, $payment_gateway, $transaction, $payment_status, $bank_payment_proof = null){
+    public function store_subscription($user, $subscription_plan, $payment_gateway, $transaction, $payment_status, $bank_payment_proof = null)
+    {
         $purchase = new PurchaseHistory();
 
-        if($subscription_plan->expiration_date == 'monthly'){
+        if ($subscription_plan->expiration_date == 'monthly') {
             $expiration_date = date('Y-m-d', strtotime('30 days'));
-        }elseif($subscription_plan->expiration_date == 'yearly'){
+        } elseif ($subscription_plan->expiration_date == 'yearly') {
             $expiration_date = date('Y-m-d', strtotime('365 days'));
-        }elseif($subscription_plan->expiration_date == 'lifetime'){
+        } elseif ($subscription_plan->expiration_date == 'lifetime') {
             $expiration_date = 'lifetime';
         }
 
-        if($payment_status == 'success'){
+        if ($payment_status == 'success') {
             PurchaseHistory::where('provider_id', $user->id)->update(['status' => 'expired']);
         }
 
@@ -400,9 +412,9 @@ class PurchaseController extends Controller
         $purchase->expiration_date = $expiration_date;
         $purchase->maximum_service = $subscription_plan->maximum_service;
         $purchase->type = $user->is_influencer == 'yes' ? 'business' : 'influencer'; //here influencer in business provider role and client in influencer role
-        if($payment_status == 'success'){
+        if ($payment_status == 'success') {
             $purchase->status = 'active';
-        }else{
+        } else {
             $purchase->status = 'pending';
         }
 
@@ -411,13 +423,4 @@ class PurchaseController extends Controller
         $purchase->transaction = $transaction;
         $purchase->save();
     }
-
-
-
-
-
-
-
-
-
 }

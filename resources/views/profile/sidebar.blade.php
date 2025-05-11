@@ -3,7 +3,7 @@
     $unseen_ticket = App\Models\TicketMessage::where('user_id', $auth_user->id)->where('unseen_user',0)->count();
 @endphp
 
-<div class="col-lg-3 col-md-4 col-12 inflanar-personals__list mg-top-30">
+<div class="col-lg-3 col-md-12 col-12 inflanar-personals__list mg-top-30">
     <div class="inflanar-psidebar inflanar-default-bg">
         <!-- Auhtor Info -->
         <div class="inflanar-psidebar__author">

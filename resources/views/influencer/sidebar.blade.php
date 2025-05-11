@@ -91,7 +91,7 @@
 
                   <li class="{{ Route::is('influencer.pending-plan-payment') ? 'active' : '' }}"><a class="nav-link" href="{{ route('influencer.pending-plan-payment') }}">{{__('admin.Pending Payment')}}</a></li>
 
-                  <li class=""><a class="nav-link" href="{{route('pricing-plan')}}" target="blank">{{__('admin.Buy a Plan')}}</a></li>
+                  {{-- <li class=""><a class="nav-link" href="{{route('pricing-plan')}}" target="blank">{{__('admin.Buy a Plan')}}</a></li> --}}
 
               </ul>
             </li>

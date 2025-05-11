@@ -32,7 +32,7 @@
   <link rel="stylesheet" href="{{ asset('backend/css/bootstrap-datepicker.min.css') }}">
 
   <link rel="stylesheet" href="{{ asset('backend/clockpicker/dist/bootstrap-clockpicker.css') }}">
-
+  <link rel="stylesheet" href="{{ asset('frontend/style.css') }}">
   <script src="{{ asset('frontend/js/jquery-3.7.1.min.js') }}"></script>
   <style>
     .fade.in {

@@ -145,9 +145,10 @@
         "use strict";
         $(document).ready(function () {
 
+
             $("#adminLoginForm").on('submit',function(e) {
                 e.preventDefault();
-
+                console.log('form submitted');
                 $.ajax({
                     url: "{{ route('admin.store-login') }}",
                     type:"post",

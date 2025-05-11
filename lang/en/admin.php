@@ -939,5 +939,6 @@
   'Unlimited Service Upload' => 'Unlimited Service Upload',
   'Unlimited' => 'Unlimited',
   'Booking Applies'=> 'Booking Applies',
-
+  'Current Plan' => 'Current Plan',
+  'Upgrade' => 'Upgrade',
 );

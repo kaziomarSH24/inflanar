@@ -13,6 +13,7 @@ use App\Models\FacebookPixel;
 use App\Models\TawkChat;
 use App\Models\CookieConsent;
 use App\Models\MultiCurrency;
+use Illuminate\Support\Facades\URL;
 use View;
 use Session;
 class AppServiceProvider extends ServiceProvider
@@ -31,6 +32,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Session::put('admin_lang', 'en');
+
+        if (env('APP_ENV') !== 'local') {
+            URL::forceScheme('https');
+        }
 
         View::composer('*', function($view){
             $setting = Setting::first();

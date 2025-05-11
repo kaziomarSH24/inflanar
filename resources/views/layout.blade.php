@@ -173,7 +173,7 @@
 
                             <li class="menu-item-has-children"><a href="#">{{__('admin.Pages')}}</a>
                                 <ul class="sub-menu">
-                                    @if ($setting->commission_type == 'subscription')
+                                    {{-- @if ($setting->commission_type == 'subscription')
                                         @php
                                             $json_module_data = file_get_contents(base_path('modules_statuses.json'));
                                             $module_status = json_decode($json_module_data);
@@ -185,7 +185,7 @@
                                                 <a class="{{ Route::is('pricing-plan') ? 'active':'' }}" href="{{ route('pricing-plan') }}">{{__('admin.Subscription')}}</a>
                                             </li>
                                         @endif
-                                    @endif
+                                    @endif --}}
                                     <li><a href="{{ route('blogs') }}">{{__('admin.Our Blogs')}}</a></li>
                                     <li><a href="{{ route('faq') }}">{{__('admin.FAQ')}}</a></li>
                                     <li><a href="{{ route('terms-conditions') }}">{{__('admin.Terms & Conditions')}}</a></li>
@@ -283,7 +283,7 @@
 													<li class="menu-item-has-children"><a href="#">{{__('admin.Pages')}}</a>
 														<ul class="sub-menu">
 
-                                                            @if ($setting->commission_type == 'subscription')
+                                                            {{-- @if ($setting->commission_type == 'subscription')
                                                                 @php
                                                                     $json_module_data = file_get_contents(base_path('modules_statuses.json'));
                                                                     $module_status = json_decode($json_module_data);
@@ -295,7 +295,7 @@
                                                                         <a class="{{ Route::is('pricing-plan') ? 'active':'' }}" href="{{ route('pricing-plan') }}">{{__('admin.Subscription')}}</a>
                                                                     </li>
                                                                 @endif
-                                                            @endif
+                                                            @endif --}}
 
                                                             <li><a href="{{ route('about-us') }}">{{__('admin.About Us')}}</a></li>
 
@@ -303,9 +303,9 @@
 															<li><a href="{{ route('faq') }}">{{__('admin.FAQ')}}</a></li>
 															<li><a href="{{ route('terms-conditions') }}">{{__('admin.Terms & Conditions')}}</a></li>
 															<li><a href="{{ route('privacy-policy') }}">{{__('admin.Privacy Policy')}}</a></li>
-                                                            @foreach ($custom_pages as $custom_page)
+                                                            {{-- @foreach ($custom_pages as $custom_page)
 															    <li><a href="{{ route('custom-page', $custom_page->slug) }}">{{ $custom_page->page_name }}</a></li>
-                                                            @endforeach
+                                                            @endforeach --}}
 
 														</ul>
 													</li>
