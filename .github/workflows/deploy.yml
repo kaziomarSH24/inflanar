@@ -30,8 +30,7 @@ jobs:
             git pull origin main
             composer install --no-interaction --prefer-dist --optimize-autoloader
             php artisan migrate --force
+            php artisan module:migrate --force
             php artisan config:cache || true
-            php artisan route:clear || true
-            php artisan route:cache || true
-            php artisan view:cache
+            php artisan optimize:clear || true
             chmod -R 775 storage bootstrap/cache

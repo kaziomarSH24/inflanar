@@ -33,12 +33,12 @@
                             <input type="file" class="form-control-file" name="image">
                         </div>
 
-                        @isset($influencer_subscription_fees)
+                        @isset($business_subscription_fees)
                         <div class="form-group pl-3 col-12">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" name="agree_fees" class="custom-control-input" id="agree_fees">
-                                <label class="custom-control-label" for="agree_fees">I agree to the {{ $influencer_subscription_fees->fees_type == 'percentage' ? $influencer_subscription_fees->fees . '%' : '$' . $influencer_subscription_fees->fees }} processing fee <span data-toggle="tooltip" data-placement="top" class="fa fa-info-circle text--primary" title=""
-                                    data-original-title="This fee applies to influencers. When an influencer books this service, a {{ $influencer_subscription_fees->fees_type == 'percentage' ? $influencer_subscription_fees->fees . '%' : '$' . $influencer_subscription_fees->fees }} fee will be added to their total charge.">
+                                <label class="custom-control-label" for="agree_fees">I agree to the {{ $business_subscription_fees->fees_type == 'percentage' ? $business_subscription_fees->fees . '%' : '$' . $business_subscription_fees->fees }} processing fee <span data-toggle="tooltip" data-placement="top" class="fa fa-info-circle text--primary" title=""
+                                    data-original-title="This fee applies to influencers. When an influencer books this service, a {{ $business_subscription_fees->fees_type == 'percentage' ? $business_subscription_fees->fees . '%' : '$' . $business_subscription_fees->fees }} fee will be added to their total charge.">
                                     <span class="text-danger">*</span>
                                 </span>
                                 </label>
@@ -136,6 +136,7 @@
 
                     </div>
 
+                    <button class="btn btn-primary disabled-button" type="submit" disabled id="submitBtn">{{__('admin.Save Service')}}</button>
                     <button class="btn btn-primary disabled-button" type="submit" disabled id="submitBtn">{{__('admin.Save Service')}}</button>
                 </div>
 

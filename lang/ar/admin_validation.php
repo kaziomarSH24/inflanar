@@ -240,4 +240,5 @@
   'Pls Upgrade your Subscription Plan' => 'Pls Upgrade your Subscription Plan',
   'This Product dosen\'t have any variant' => 'This Product dosen\'t have any variant',
   'You Cant Message Own Product' => 'You Can\'t Message Own Product',
+  'You\'ve successfully applied for this campaign! Good luck!' => 'لقد قمت بتقديم طلبك لهذه الحملة بنجاح! حظًا سعيدًا!'
 );

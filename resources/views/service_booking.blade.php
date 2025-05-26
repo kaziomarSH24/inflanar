@@ -138,7 +138,8 @@ $tags .= $service_tag->value.', ';
                         </div>
                         @endif
                         {{-- <div class="inflanar-step-buttons mg-top-60">
-                            <button href="javascript:;" id="next_btn" class="inflanar-btn">{{__('admin.Next Step')}}</button>
+                            <button href="javascript:;" id="next_btn" class="inflanar-btn">{{__('admin.Next
+                                Step')}}</button>
                         </div> --}}
                     </div>
                     <!-- End Single Tab -->
@@ -273,7 +274,8 @@ $tags .= $service_tag->value.', ';
 
                             <div class="inflanar-package-info__single">
                                 <p><span><b>{{__('admin.Processing Fees')}}</b></span> <span>
-                                    <b class="fees" id="fees" data-fees="{{ $fees->fees }}" data-fees-type="{{ $fees->fees_type }}">
+                                        <b class="fees" id="fees" data-fees="{{ $fees->fees }}"
+                                            data-fees-type="{{ $fees->fees_type }}">
                                             {{ $fees->fees_type == 'percentage' ? $fees->fees . '%' :
                                             currency($fees->fees) }}
                                         </b>
@@ -298,7 +300,10 @@ $tags .= $service_tag->value.', ';
                 <div class="inflanar-step-buttons mg-top-30">
                     {{-- <button id="step-prev-button" type="submit"
                         class="inflanar-btn inflanar-btn__border"><span>{{__('admin.Previous')}}</span></button> --}}
-                    <button id="goToPayment" class="inflanar-btn">{{__('admin.Booking')}}</button>
+                    <button id="goToPayment" class="inflanar-btn">
+                        <span class="btn-text">{{__('admin.Apply')}}</span>
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="goToPaymentSpinner"></span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -321,26 +326,47 @@ $tags .= $service_tag->value.', ';
             $("#goToPayment").on("click", function(e){
                 e.preventDefault();
                 let agree_fees = $("#agree_fees").is(":checked");
+                if(!agree_fees){
+                    toastr.error("Please agree with processing fees")
+                    return;
+                }
+                // Show spinner and disable button
+                $(this).find('.btn-text').addClass('d-none');
+                $(this).find('#goToPaymentSpinner').removeClass('d-none');
+                $(this).prop('disabled', true);
+                $(this).css('backgroundColor', '#666666');
 
                 $.ajax({
                     type: 'post',
                     data: $('#submitReadyToBooking').serialize(),
-                    url: "{{ route('store-booking-info-to-session') }}",
+
+                    url: "{{ route('apply-campaign', $service->slug) }}",
                     success: function (response) {
-                        console.log(response);
+                        console.log(response.message);
+
                         if(response.status == 'faild'){
                             toastr.error(response.message)
                             setTimeout(() => {
                                 window.location = "{{ route('user.edit-profile') }}"
                             }, 3000);
                         }
-                        if(response.status == 'success'){
-                            if(!agree_fees){
-                            toastr.error("Please agree with fees")
+
+                        if(response.status == 'error'){
+                            toastr.error(response.message)
                             return;
                         }
-                            window.location = "{{ route('payment', $service->slug) }}";
+                        if(response.status == 'success'){
+                            console.log(response.message);
+
+                            toastr.success(response.message)
+
+                            setTimeout(() => {
+                                window.location = "{{ route('user.orders') }}";
+                            }, 3000);
                         }
+
+
+
                     },
                     error: function(error) {
                        console.log(error);
@@ -351,6 +377,10 @@ $tags .= $service_tag->value.', ';
                             if(error.responseJSON.errors.phone)toastr.error(error.responseJSON.errors.phone[0])
                             if(error.responseJSON.errors.schedule_time_slot)toastr.error(error.responseJSON.errors.schedule_time_slot[0])
                         }
+                        $("#goToPayment").find('.btn-text').removeClass('d-none');
+                        $("#goToPayment").find('#goToPaymentSpinner').addClass('d-none');
+                        $("#goToPayment").prop('disabled', false);
+                        $("#goToPayment").css('backgroundColor', '#fe2c55');
                     }
                 });
 
@@ -440,18 +470,18 @@ $tags .= $service_tag->value.', ';
     if($(this).is(":checked")){
         let feesPercent =(total * fees) / 100;
         if(feesType == 'percentage'){
-            total_price += feesPercent;
+            total_price -= feesPercent;
             claculateFees.val(feesPercent);
         } else {
             let feesFixed = parseFloat(fees);
-            total_price += feesFixed;
+            total_price -= feesFixed;
             claculateFees.val(feesFixed);
         }
     } else {
         if(feesType == 'percentage'){
-            total_price -= (total / (1 + fees / 100)) * (fees / 100);
+            total_price += (total / (1 - fees / 100)) * (fees / 100);
         } else {
-            total_price -= parseFloat(fees);
+            total_price += parseFloat(fees);
         }
     }
 

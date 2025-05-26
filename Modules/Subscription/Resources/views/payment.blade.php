@@ -358,7 +358,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{__('admin.Close')}}</button>
-                <button type="submi" class="btn btn-primary">{{__('admin.Payment now')}}</button>
+                <button type="submi" class="btn btn-primary">{{__('admin.Payment now gdg')}}</button>
             </div>
         </form>
         </div>

@@ -85,15 +85,15 @@ class ServiceController extends Controller
     public function create()
     {
         $categories = Category::with('translate')->where('status', 'active')->get();
-        $influencer_subscription_fees = SubscriptionFee::where('user_type', 'influencer')->first();
+        $business_subscription_fees = SubscriptionFee::where('user_type', 'business')->first();
 
-        return view('influencer.service_create', compact('categories', 'influencer_subscription_fees'));
+        return view('influencer.service_create', compact('categories', 'business_subscription_fees'));
     }
 
     public function store(Request $request)
     {
 
-        // dd($request->all());
+        dd($request->all());
         $request->validate([
             'image' => 'required',
             'name' => 'required',
@@ -132,7 +132,7 @@ class ServiceController extends Controller
 
         // $auth_user = Auth::guard('web')->user();
 
-        $service->influencer_id = $auth_user->id;
+        $service->influencer_id = $auth_user->id; //here influencer means business user
         $service->category_id = $request->category_id;
         $service->slug = $request->slug;
         $service->price = $request->price;

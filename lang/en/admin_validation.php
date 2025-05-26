@@ -287,4 +287,5 @@
     'Plan is required' => 'Plan is required',
     'Assign Successfully' => 'Assign Successfully',
     'Please at first login in your account' => 'Please at first login in your account',
+    'You\'ve successfully applied for this campaign! Good luck!' => 'You\'ve successfully applied for this campaign! Good luck!',
 );

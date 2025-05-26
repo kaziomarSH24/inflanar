@@ -141,7 +141,8 @@ Route::group(['middleware' => ['XSS','DEMO']], function () {
         Route::controller(PaymentController::class)->group(function () {
             Route::get('/booking-service/{slug}', 'service_booking')->name('booking-service');
             Route::get('/get-available-schedule', 'get_available_schedule')->name('get-available-schedule');
-            Route::post('/store-booking-info-to-session', 'store_booking_info_to_session')->name('store-booking-info-to-session');
+            // Route::post('/store-booking-info-to-session', 'store_booking_info_to_session')->name('store-booking-info-to-session');
+            Route::post('/apply-campaign/{slug}', 'applyCampaign')->name('apply-campaign');
             Route::get('/payment/{slug}', 'payment')->name('payment');
             Route::post('/apply-coupon', 'apply_coupon')->name('apply-coupon');
 

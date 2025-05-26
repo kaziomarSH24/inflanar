@@ -186,33 +186,33 @@
                                                     </p>
                                                 </li>
                                                 <li class="inflanar-dflex">
-                                                    <h4 class="inflanar-profile-info__title">{{__('admin.Fees')}}:</h4>
+                                                    <h4 class="inflanar-profile-info__title">{{__('admin.Processing Fee')}}(-):</h4>
                                                     <p class="inflanar-profile-info__text">
                                                         {{-- @dd($order) --}}
 
-
+                                                        {{ currency($order->fees_amount) }}
                                                         @if ($order->fees)
-                                                            {{ $order->fees->fees_type == 'fixed' ? currency($order->fees->fees) : $order->fees->fees.'%' }}
+                                                            {{ $order->fees->fees_type == 'fixed' ? '(' . currency($order->fees->fees) .')' : '('.$order->fees->fees.'%)' }}
                                                         @endif
 
                                                     </p>
                                                 </li>
-                                                <li class="inflanar-dflex">
-                                                    <h4 class="inflanar-profile-info__title">{{__('admin.Fees Amount')}}:</h4>
+                                                {{-- <li class="inflanar-dflex">
+                                                    <h4 class="inflanar-profile-info__title">{{__('admin.Processing Fee Amount')}} :</h4>
                                                     <p class="inflanar-profile-info__text">
 
                                                         {{ currency($order->fees_amount) }}
 
                                                     </p>
-                                                </li>
-                                                <li class="inflanar-dflex">
+                                                </li> --}}
+                                                {{-- <li class="inflanar-dflex">
                                                     <h4 class="inflanar-profile-info__title">{{__('admin.Discount')}} (-):</h4>
                                                     <p class="inflanar-profile-info__text">
 
                                                         {{ currency($order->coupon_discount) }}
 
                                                     </p>
-                                                </li>
+                                                </li> --}}
                                                 <li class="inflanar-dflex">
                                                     <h4 class="inflanar-profile-info__title">{{__('admin.Total Amount')}}:</h4>
                                                     <p class="inflanar-profile-info__text">

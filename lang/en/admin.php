@@ -436,6 +436,7 @@
   'Confirm Password' => 'Confirm Password',
   'Send Mail To Business' => 'Send Mail To Business',
   'Business List' => 'Business List',
+  'Influencer List' => 'Influencer List',
   'Send email to all Business' => 'Send email to all Business',
   'Inctive' => 'Inctive',
   'You cannot delete this seller. Because there are one or more products and shop accounts created under this seller.' => 'لا يمكنك حذف هذا البائع. لأن هناك منتجات وحسابات متجر تم إنشاؤها تحت هذا البائع.',
@@ -905,7 +906,7 @@
   'Document' => 'Document',
   'File' => 'File',
 
-  'Satisfied Clients' => 'Satisfied Clients dsfsfs  ',
+  'Satisfied Clients' => 'Satisfied Clients',
 
   'Live Chat' => 'Live Chat',
   'Please login first' => 'Please login first',
@@ -930,7 +931,9 @@
   'Subscription Fees' => 'Subscription Fees',
   'Booking' => 'Booking',
   'Fees' => 'Fees',
+  'Processing Fee' => 'Processing Fee',
   'Fees Amount' => 'Fees Amount',
+  'Processing Fee Amount' => 'Processing Fee Amount',
   'Subscription Plan For Influencer' => 'Subscription Plan For Influencer',
   'Subscription Plan For Business Provider' => 'Subscription Plan For Business Provider',
   'Business Provider' => 'Business Provider',
@@ -941,4 +944,5 @@
   'Booking Applies'=> 'Booking Applies',
   'Current Plan' => 'Current Plan',
   'Upgrade' => 'Upgrade',
+
 );

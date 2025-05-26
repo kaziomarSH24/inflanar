@@ -92,9 +92,9 @@
             <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i><span>{{__('admin.Manage Influencers')}}</span></a>
             <ul class="dropdown-menu">
                 {{-- <li class="{{ Route::is('admin.client-list') || Route::is('admin.client-show') || Route::is('admin.send-email-to-all-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.client-list') }}">{{__('admin.Influencer List')}}</a></li> --}}
-                <li class="{{ Route::is('admin.client-list') || Route::is('admin.client-show') || Route::is('admin.send-email-to-all-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.client-list') }}">{{__('admin.Business List')}}</a></li>
+                <li class="{{ Route::is('admin.client-list') || Route::is('admin.client-show') || Route::is('admin.send-email-to-all-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.client-list') }}">{{__('admin.Influencer List')}}</a></li>
 
-                <li class="{{ Route::is('admin.pending-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.pending-client') }}">{{__('admin.Pending Business')}}</a></li>
+                <li class="{{ Route::is('admin.pending-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.pending-client') }}">{{__('admin.Pending Influencer')}}</a></li>
                 {{-- <li class="{{ Route::is('admin.pending-client') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.pending-client') }}">{{__('admin.Pending Influencer')}}</a></li> --}}
             </ul>
           </li>
