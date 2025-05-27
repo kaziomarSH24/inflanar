@@ -36,6 +36,8 @@ use Modules\PaymentGateway\Http\Controllers\PaymentGatewayController;
 use App\Models\MultiCurrency;
 use Carbon\Carbon;
 use MercadoPago\Subscription;
+use Modules\Language\Entities\Language;
+use Modules\Service\Entities\ServiceTranslation;
 use Modules\Subscription\Entities\ProviderStripe;
 use Modules\Subscription\Entities\ProviderRazorpay;
 use Modules\Subscription\Entities\ProviderFlutterwave;
@@ -96,53 +98,53 @@ class PaymentController extends Controller
         return response()->json(['is_available' => $is_available, 'available_schedules' => $html]);
     }
 
-    public function store_booking_info_to_session(Request $request){
-        $rules = [
-            // 'address'=>'required',
-            'date'=>'required',
-            // 'name'=>'required',
-            // 'phone'=>'required',
-            'schedule_time_slot'=>'required',
-        ];
-        $customMessages = [
-            'address.required' => trans('admin_validation.Address is required'),
-            'date.required' => trans('admin_validation.Schedule date is required'),
-            'name.required' => trans('admin_validation.Name is required'),
-            'phone.required' => trans('admin_validation.Phone is required'),
-            'schedule_time_slot.required' => trans('admin_validation.Schedule slot is required'),
-        ];
-        $this->validate($request, $rules,$customMessages);
+    // public function store_booking_info_to_session(Request $request){
+    //     $rules = [
+    //         // 'address'=>'required',
+    //         'date'=>'required',
+    //         // 'name'=>'required',
+    //         // 'phone'=>'required',
+    //         'schedule_time_slot'=>'required',
+    //     ];
+    //     $customMessages = [
+    //         'address.required' => trans('admin_validation.Address is required'),
+    //         'date.required' => trans('admin_validation.Schedule date is required'),
+    //         'name.required' => trans('admin_validation.Name is required'),
+    //         'phone.required' => trans('admin_validation.Phone is required'),
+    //         'schedule_time_slot.required' => trans('admin_validation.Schedule slot is required'),
+    //     ];
+    //     $this->validate($request, $rules,$customMessages);
 
-        $user_address = auth()->user()->address;
-        $user_name = auth()->user()->name;
-        $user_phone = auth()->user()->phone;
-        $user_email = auth()->user()->email;
+    //     $user_address = auth()->user()->address;
+    //     $user_name = auth()->user()->name;
+    //     $user_phone = auth()->user()->phone;
+    //     $user_email = auth()->user()->email;
 
-        if($user_address == null || $user_name == null || $user_phone == null ){
-            return response()->json(['status' => 'faild' , 'message' => 'Please update your profile information']);
-        }
+    //     if($user_address == null || $user_name == null || $user_phone == null ){
+    //         return response()->json(['status' => 'faild' , 'message' => 'Please update your profile information']);
+    //     }
 
-        $booking_info = (object) array(
-            'ids' => $request->ids,
-            'prices' => $request->prices,
-            'names' => $request->names,
-            'extra_total' => $request->extra_total,
-            'sub_total' => $request->sub_total,
-            'total' => $request->total,
-            'date' => $request->date,
-            'schedule_time_slot' => $request->schedule_time_slot,
-            'name' => $user_name,
-            'email' => $user_email,
-            'phone' => $user_phone,
-            'address' => $user_address,
-            'fees' => $request->fees,
-            // 'order_note' => $request->order_note,
-        );
+    //     $booking_info = (object) array(
+    //         'ids' => $request->ids,
+    //         'prices' => $request->prices,
+    //         'names' => $request->names,
+    //         'extra_total' => $request->extra_total,
+    //         'sub_total' => $request->sub_total,
+    //         'total' => $request->total,
+    //         'date' => $request->date,
+    //         'schedule_time_slot' => $request->schedule_time_slot,
+    //         'name' => $user_name,
+    //         'email' => $user_email,
+    //         'phone' => $user_phone,
+    //         'address' => $user_address,
+    //         'fees' => $request->fees,
+    //         // 'order_note' => $request->order_note,
+    //     );
 
-        Session::put('booking_info', $booking_info);
+    //     Session::put('booking_info', $booking_info);
 
-        return response()->json(['status' => 'success']);
-    }
+    //     return response()->json(['status' => 'success']);
+    // }
     //applies campaign to booking info
     public function applyCampaign(Request $request, $slug){
 
@@ -209,169 +211,169 @@ class PaymentController extends Controller
         return response()->json(['status' => 'success', 'message' => $notification]);
     }
 
-    // public function payment($slug){
+    public function payment($slug){
 
-    //     $setting = Setting::first();
-    //     if ($setting->commission_type == 'subscription') {
-    //         $json_module_data = file_get_contents(base_path('modules_statuses.json'));
-    //         $module_status = json_decode($json_module_data);
-    //         // dd($module_status);
-    //       $service = Service::with('category','influencer')->where(['status' => 'active', 'approve_by_admin' => 'enable', 'is_banned' => 'disable', 'slug' => $slug])->first();
+        $setting = Setting::first();
+        if ($setting->commission_type == 'subscription') {
+            $json_module_data = file_get_contents(base_path('modules_statuses.json'));
+            $module_status = json_decode($json_module_data);
+            // dd($module_status);
+          $service = Service::with('category','influencer')->where(['status' => 'active', 'approve_by_admin' => 'enable', 'is_banned' => 'disable', 'slug' => $slug])->first();
 
-    //         if(!$service)abort(404);
+            if(!$service)abort(404);
 
-    //         $booking_info = Session::get('booking_info');
-    //         if(!$booking_info){
-    //             $notification = trans('admin_validation.Something went wrong, please try again');
-    //             $notification = array('messege'=>$notification,'alert-type'=>'error');
-    //             return redirect()->route('booking-service', $slug)->with($notification);
-    //         }
-    //         // dd(is_int((int)$booking_info->total));
-    //         $discount = 0.00;
-    //         if(Session::get('coupon_code') && Session::get('offer_percentage')) {
+            $booking_info = Session::get('booking_info');
+            if(!$booking_info){
+                $notification = trans('admin_validation.Something went wrong, please try again');
+                $notification = array('messege'=>$notification,'alert-type'=>'error');
+                return redirect()->route('booking-service', $slug)->with($notification);
+            }
+            // dd(is_int((int)$booking_info->total));
+            $discount = 0.00;
+            if(Session::get('coupon_code') && Session::get('offer_percentage')) {
 
-    //             $offer_percentage = Session::get('offer_percentage');
+                $offer_percentage = Session::get('offer_percentage');
 
-    //             $discount = ($offer_percentage / 100) * $booking_info->total;
-    //         }
+                $discount = ($offer_percentage / 100) * $booking_info->total;
+            }
 
-    //         $grand_total = $booking_info->total - $discount;
+            $grand_total = $booking_info->total - $discount;
 
-    //         $user = Auth::guard('web')->user();
+            $user = Auth::guard('web')->user();
 
-    //         $paypal = PaypalPayment::first();
-    //         $stripe = StripePayment::first();
-    //         $razorpay = RazorpayPayment::first();
-    //         $flutterwave = Flutterwave::first();
-    //         $bank = BankPayment::first();
-    //         $paystackAndMollie = PaystackAndMollie::first();
-    //         $instamojo = InstamojoPayment::first();
+            $paypal = PaypalPayment::first();
+            $stripe = StripePayment::first();
+            $razorpay = RazorpayPayment::first();
+            $flutterwave = Flutterwave::first();
+            $bank = BankPayment::first();
+            $paystackAndMollie = PaystackAndMollie::first();
+            $instamojo = InstamojoPayment::first();
 
-    //         $json_module_data = file_get_contents(base_path('modules_statuses.json'));
-    //         $module_status = json_decode($json_module_data);
+            $json_module_data = file_get_contents(base_path('modules_statuses.json'));
+            $module_status = json_decode($json_module_data);
 
-    //         $paymongo = '';
-    //         $iyzico = '';
-    //         $mercado = '';
-    //         if($service->influencer_id){
-    //             $provider_stripe = ProviderStripe::where('provider_id', $service->influencer_id)->first();
-    //             $provider_paypal = ProviderPaypal::where('provider_id', $service->influencer_id)->first();
-    //             $provider_razorpay = ProviderRazorpay::where('provider_id', $service->influencer_id)->first();
-    //             $provider_flutterwave = ProviderFlutterwave::where('provider_id', $service->influencer_id)->first();
-    //             $provider_paystack = ProviderPaystack::where('provider_id', $service->influencer_id)->first();
-    //             $provider_mollie = ProviderMollie::where('provider_id', $service->influencer_id)->first();
-    //             $provider_instamojo = ProviderInstamojo::where('provider_id', $service->influencer_id)->first();
-    //             $provider_bank_handcash = ProviderBankHandcash::where('provider_id', $service->influencer_id)->first();
-    //         }else{
-    //             $provider_stripe = '';
-    //             $provider_paypal = '';
-    //             $provider_razorpay = '';
-    //             $provider_flutterwave = '';
-    //             $provider_paystack = '';
-    //             $provider_mollie = '';
-    //             $provider_instamojo = '';
-    //             $provider_bank_handcash = '';
-    //         }
-    //         if($module_status->PaymentGateway){
-    //             $paymongo = PaymongoPayment::first();
-    //             $iyzico = IyzicoPayment::first();
-    //             $mercado = MercadoPagoPayment::first();
-    //         }
-    //         // $provider_stripe['image'] = $stripe->image;
-    //         // dd($booking_info);
-    //         // dd($provider_stripe);
-    //         return view('subscription::payment', [
-    //             'service' => $service,
-    //             'booking_info' => $booking_info,
-    //             'discount' => $discount,
-    //             'grand_total' => $grand_total,
-    //             'paypal' => $paypal,
-    //             'bank' => $bank,
-    //             'stripe' => $stripe,
-    //             // 'stripe' => $provider_stripe,
-    //             'razorpay' => $razorpay,
-    //             'flutterwave' => $flutterwave,
-    //             'paystack' => $paystackAndMollie,
-    //             'mollie' => $paystackAndMollie,
-    //             'instamojo' => $instamojo,
-    //             'user' => $user,
-    //             'paymongo' => $paymongo,
-    //             'iyzico' => $iyzico,
-    //             'mercado' => $mercado,
-    //             'provider_stripe' => $provider_stripe,
-    //             'provider_paypal' => $provider_paypal,
-    //             'provider_razorpay' => $provider_razorpay,
-    //             'provider_flutterwave' => $provider_flutterwave,
-    //             'provider_paystack' => $provider_paystack,
-    //             'provider_mollie' => $provider_mollie,
-    //             'provider_instamojo' => $provider_instamojo,
-    //             'provider_bank_handcash' => $provider_bank_handcash,
-    //         ]);
+            $paymongo = '';
+            $iyzico = '';
+            $mercado = '';
+            if($service->influencer_id){
+                $provider_stripe = ProviderStripe::where('provider_id', $service->influencer_id)->first();
+                $provider_paypal = ProviderPaypal::where('provider_id', $service->influencer_id)->first();
+                $provider_razorpay = ProviderRazorpay::where('provider_id', $service->influencer_id)->first();
+                $provider_flutterwave = ProviderFlutterwave::where('provider_id', $service->influencer_id)->first();
+                $provider_paystack = ProviderPaystack::where('provider_id', $service->influencer_id)->first();
+                $provider_mollie = ProviderMollie::where('provider_id', $service->influencer_id)->first();
+                $provider_instamojo = ProviderInstamojo::where('provider_id', $service->influencer_id)->first();
+                $provider_bank_handcash = ProviderBankHandcash::where('provider_id', $service->influencer_id)->first();
+            }else{
+                $provider_stripe = '';
+                $provider_paypal = '';
+                $provider_razorpay = '';
+                $provider_flutterwave = '';
+                $provider_paystack = '';
+                $provider_mollie = '';
+                $provider_instamojo = '';
+                $provider_bank_handcash = '';
+            }
+            if($module_status->PaymentGateway){
+                $paymongo = PaymongoPayment::first();
+                $iyzico = IyzicoPayment::first();
+                $mercado = MercadoPagoPayment::first();
+            }
+            // $provider_stripe['image'] = $stripe->image;
+            // dd($booking_info);
+            // dd($provider_stripe);
+            return view('subscription::payment', [
+                'service' => $service,
+                'booking_info' => $booking_info,
+                'discount' => $discount,
+                'grand_total' => $grand_total,
+                'paypal' => $paypal,
+                'bank' => $bank,
+                'stripe' => $stripe,
+                // 'stripe' => $provider_stripe,
+                'razorpay' => $razorpay,
+                'flutterwave' => $flutterwave,
+                'paystack' => $paystackAndMollie,
+                'mollie' => $paystackAndMollie,
+                'instamojo' => $instamojo,
+                'user' => $user,
+                'paymongo' => $paymongo,
+                'iyzico' => $iyzico,
+                'mercado' => $mercado,
+                'provider_stripe' => $provider_stripe,
+                'provider_paypal' => $provider_paypal,
+                'provider_razorpay' => $provider_razorpay,
+                'provider_flutterwave' => $provider_flutterwave,
+                'provider_paystack' => $provider_paystack,
+                'provider_mollie' => $provider_mollie,
+                'provider_instamojo' => $provider_instamojo,
+                'provider_bank_handcash' => $provider_bank_handcash,
+            ]);
 
 
-    //     }else{
-    //         $service = Service::with('category','influencer')->where(['status' => 'active', 'approve_by_admin' => 'enable', 'is_banned' => 'disable', 'slug' => $slug])->first();
+        }else{
+            $service = Service::with('category','influencer')->where(['status' => 'active', 'approve_by_admin' => 'enable', 'is_banned' => 'disable', 'slug' => $slug])->first();
 
-    //         if(!$service)abort(404);
+            if(!$service)abort(404);
 
-    //         $booking_info = Session::get('booking_info');
-    //         if(!$booking_info){
-    //             $notification = trans('admin_validation.Something went wrong, please try again');
-    //             $notification = array('messege'=>$notification,'alert-type'=>'error');
-    //             return redirect()->route('booking-service', $slug)->with($notification);
-    //         }
+            $booking_info = Session::get('booking_info');
+            if(!$booking_info){
+                $notification = trans('admin_validation.Something went wrong, please try again');
+                $notification = array('messege'=>$notification,'alert-type'=>'error');
+                return redirect()->route('booking-service', $slug)->with($notification);
+            }
 
-    //         $discount = 0.00;
-    //         if(Session::get('coupon_code') && Session::get('offer_percentage')) {
-    //             $offer_percentage = Session::get('offer_percentage');
-    //             $discount = ($offer_percentage / 100) * $booking_info->total;
-    //         }
+            $discount = 0.00;
+            if(Session::get('coupon_code') && Session::get('offer_percentage')) {
+                $offer_percentage = Session::get('offer_percentage');
+                $discount = ($offer_percentage / 100) * $booking_info->total;
+            }
 
-    //         $grand_total = $booking_info->total - $discount;
+            $grand_total = $booking_info->total - $discount;
 
-    //         $user = Auth::guard('web')->user();
+            $user = Auth::guard('web')->user();
 
-    //         $paypal = PaypalPayment::first();
-    //         $stripe = StripePayment::first();
-    //         $razorpay = RazorpayPayment::first();
-    //         $flutterwave = Flutterwave::first();
-    //         $bank = BankPayment::first();
-    //         $paystackAndMollie = PaystackAndMollie::first();
-    //         $instamojo = InstamojoPayment::first();
+            $paypal = PaypalPayment::first();
+            $stripe = StripePayment::first();
+            $razorpay = RazorpayPayment::first();
+            $flutterwave = Flutterwave::first();
+            $bank = BankPayment::first();
+            $paystackAndMollie = PaystackAndMollie::first();
+            $instamojo = InstamojoPayment::first();
 
-    //         $json_module_data = file_get_contents(base_path('modules_statuses.json'));
-    //         $module_status = json_decode($json_module_data);
+            $json_module_data = file_get_contents(base_path('modules_statuses.json'));
+            $module_status = json_decode($json_module_data);
 
-    //         $paymongo = '';
-    //         $iyzico = '';
-    //         $mercado = '';
+            $paymongo = '';
+            $iyzico = '';
+            $mercado = '';
 
-    //         if($module_status->PaymentGateway){
-    //             $paymongo = PaymongoPayment::first();
-    //             $iyzico = IyzicoPayment::first();
-    //             $mercado = MercadoPagoPayment::first();
-    //         }
+            if($module_status->PaymentGateway){
+                $paymongo = PaymongoPayment::first();
+                $iyzico = IyzicoPayment::first();
+                $mercado = MercadoPagoPayment::first();
+            }
 
-    //         return view('payment', [
-    //             'service' => $service,
-    //             'booking_info' => $booking_info,
-    //             'discount' => $discount,
-    //             'grand_total' => $grand_total,
-    //             'paypal' => $paypal,
-    //             'bank' => $bank,
-    //             'stripe' => $stripe,
-    //             'razorpay' => $razorpay,
-    //             'flutterwave' => $flutterwave,
-    //             'paystack' => $paystackAndMollie,
-    //             'mollie' => $paystackAndMollie,
-    //             'instamojo' => $instamojo,
-    //             'user' => $user,
-    //             'paymongo' => $paymongo,
-    //             'iyzico' => $iyzico,
-    //             'mercado' => $mercado,
-    //         ]);
-    //     }
-    //     }
+            return view('payment', [
+                'service' => $service,
+                'booking_info' => $booking_info,
+                'discount' => $discount,
+                'grand_total' => $grand_total,
+                'paypal' => $paypal,
+                'bank' => $bank,
+                'stripe' => $stripe,
+                'razorpay' => $razorpay,
+                'flutterwave' => $flutterwave,
+                'paystack' => $paystackAndMollie,
+                'mollie' => $paystackAndMollie,
+                'instamojo' => $instamojo,
+                'user' => $user,
+                'paymongo' => $paymongo,
+                'iyzico' => $iyzico,
+                'mercado' => $mercado,
+            ]);
+        }
+        }
 
 
     // public function apply_coupon(Request $request){
@@ -450,6 +452,115 @@ class PaymentController extends Controller
     //     $notification = array('messege'=>$notification,'alert-type'=>'success');
     //     return redirect()->route('user.orders')->with($notification);
     // }
+    public function pay_via_bank(Request $request, $slug){
+
+
+        $service_info = Session::get('service_info');
+
+         if(!$service_info){
+            $notification = trans('admin_validation.Something went wrong, please try again');
+            $notification = array('messege'=>$notification,'alert-type'=>'error');
+            return redirect()->back()->with($notification);
+        }
+
+        $rules = [
+            'tnx_info'=>'required',
+        ];
+        $customMessages = [
+            'tnx_info.required' => trans('admin_validation.Transaction is required'),
+        ];
+
+        $request->validate($rules,$customMessages);
+
+
+        // $order = $this->create_order($user, $service, $booking_info, $influencer_id, $client_id, 'Bank Payment', 'pending', $request->tnx_info);
+        $service = $this->create_service($service_info, 'Bank Payment', 'pending', $result->balance_transaction);
+
+        $notification = trans('admin_validation.Your service has been created successfully. Please wait for admin approval.');
+        $notification = array('messege'=>$notification,'alert-type'=>'success');
+        return redirect()->route('influencer.service.edit', ['service' => $service->id, 'lang_code' => front_lang()])->with($notification);
+
+    }
+
+    public function pay_via_stripe(Request $request, $slug){
+        // dd($request->all(), Session::get('service_info'));
+
+        $service_info = Session::get('service_info');
+        // dd($booking_info);
+        if(!$service_info){
+            $notification = trans('admin_validation.Something went wrong, please try again');
+            $notification = array('messege'=>$notification,'alert-type'=>'error');
+            return redirect()->back()->with($notification);
+        }
+
+        $stripe = StripePayment::first();
+        $payable_amount = round(($service_info->total_campaign) * $stripe->currency->currency_rate,2);
+
+        Stripe\Stripe::setApiKey($stripe->stripe_secret);
+
+        $result = Stripe\Charge::create ([
+                "amount" => $payable_amount * 100,
+                "currency" => $stripe->currency->currency_code,
+                "source" => $request->stripeToken,
+                "description" => env('APP_NAME')
+            ]);
+
+        // $order = $this->create_order($user, $service, $booking_info, $influencer_id, $client_id, 'Stripe', 'success', $result->balance_transaction);
+        $service = $this->create_service($service_info, 'Stripe', 'success', $result->balance_transaction);
+
+        $notification = trans('admin_validation.Your service has been created successfully. Please wait for admin approval.');
+        $notification = array('messege'=>$notification,'alert-type'=>'success');
+        return redirect()->route('influencer.service.edit', ['service' => $service->id, 'lang_code' => front_lang()])->with($notification);
+    }
+
+
+    public function create_service($service_info, $payment_method, $payment_status, $transaction_id){
+
+        $business_provider_fees = SubscriptionFee::where('user_type','business')->first(); // influencer fee
+        $fees = [
+            'fees_type' => $business_provider_fees->fees_type,
+            'fees' => $business_provider_fees->fees,
+        ];
+        //fees amount calculation
+        if($business_provider_fees->fees_type == 'fixed'){
+            $fees_amount = $business_provider_fees->fees;
+        }else{
+            $fees_amount = ($business_provider_fees->fees / 100) * $service_info->price;
+        }
+
+        $service = new Service();
+        $service->thumbnail_image = $service_info->thumbnail_image;
+        $service->influencer_id = $service_info->influencer_id;
+        $service->category_id = $service_info->category_id;
+        $service->slug = $service_info->slug;
+        $service->price = $service_info->price;
+        $service->status = $service_info->status;
+        $service->tags = $service_info->tags;
+        $service->approve_by_admin = $service_info->approve_by_admin;
+        $service->payment_method = $payment_method;
+        $service->payment_status = $payment_status;
+        $service->transaction_id = $transaction_id;
+        $service->fees = json_encode($fees);
+        $service->fees_amount = $fees_amount;
+        $service->save();
+
+        $languages = Language::all();
+        foreach($languages as $language){
+            $service_translation = new ServiceTranslation();
+            $service_translation->service_id = $service->id;
+            $service_translation->lang_code = $language->lang_code;
+            $service_translation->title = $service_info->name;
+            $service_translation->description = $service_info->description;
+            $service_translation->features = $service_info->package_features;
+            $service_translation->seo_title = $service_info->seo_title;
+            $service_translation->seo_description = $service_info->seo_description;
+            $service_translation->save();
+        }
+
+        Session::forget('service_info');
+        return $service;
+    }
+
 
     // public function pay_via_stripe(Request $request, $slug){
     //     // dd($request->all());

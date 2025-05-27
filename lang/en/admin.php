@@ -944,5 +944,8 @@
   'Booking Applies'=> 'Booking Applies',
   'Current Plan' => 'Current Plan',
   'Upgrade' => 'Upgrade',
-
+  'Total Campaign Spand' => 'Total Campaign Spand',
+  'Pay Now' => 'Pay Now',
+  'Service Create Information' => 'Service Create Information',
+  'Transaction Id' => 'Transaction Id',
 );

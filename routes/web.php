@@ -376,7 +376,7 @@ Route::group(['middleware' => ['XSS','DEMO']], function () {
     });
 
 
-    Route::group(['as'=> 'influencer.', 'prefix' => 'influencer','middleware' => ['auth:web','CheckInfluencer']],function (){
+    Route::group(['as'=> 'influencer.', 'prefix' => 'business','middleware' => ['auth:web','CheckInfluencer']],function (){
 
         Route::controller(InfluencerProfileController::class)->group(function () {
 
@@ -403,12 +403,17 @@ Route::group(['middleware' => ['XSS','DEMO']], function () {
         Route::resource('service', InfluencerServiceController::class);
 
         Route::controller(InfluencerServiceController::class)->group(function () {
+            //store service in session
+            Route::post('store-service-in-session', 'store_create_service_info_to_session')->name('store-service-in-session');
+
+
             Route::get('additional-service/{id}', 'additional_service')->name('additional-service');
             Route::get('additional-create/{id}', 'additional_create')->name('additional-create');
             Route::post('additional-store/{id}', 'additional_store')->name('additional-store');
             Route::get('additional-edit/{id}', 'additional_edit')->name('additional-edit');
             Route::put('additional-update/{id}', 'additional_update')->name('additional-update');
             Route::delete('additional-delete/{id}', 'additional_delete')->name('additional-delete');
+
 
             Route::get('awaiting-for-approval-service', 'awaiting_for_approval')->name('awaiting-for-approval-service');
             Route::get('active-service', 'active_service')->name('active-service');

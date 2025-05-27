@@ -784,6 +784,8 @@
   'Please complete the recaptcha to submit the form' => 'يرجى استكمال الـ recaptcha لإرسال النموذج',
   'SEO Setup' => 'إعداد SEO',
   'Social Info' => 'المعلومات الاجتماعية',
+  'Total Campaign Spand' => 'إجمالي إنفاق الحملة',
+  'Pay Now' => 'ادفع الآن',
   'Content Creators' => 'Content Creators',
   'Brands' => 'Brands',
   'Designers & Creatives' => 'Designers & Creatives',
@@ -849,4 +851,6 @@
   'Edit Portfolio' => 'Edit Portfolio',
   'Update Portfolio' => 'Update Portfolio',
   'My Service' => 'My Service',
+  'Service Create Information' => 'معلومات إنشاء الخدمة',
+  'Transaction Id' => 'معرف المعاملة',
 );

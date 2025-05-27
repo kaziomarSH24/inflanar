@@ -62,6 +62,15 @@
                                         {{ currency($service->price) }}
 
                                     </h6>
+                                    <h6>{{__('admin.Processing Fee')}} :
+                                        {{ currency($service->fees_amount) }}
+                                        {{-- {{ currency($service->price) }} --}}
+                                    </h6>
+                                    <h6>{{__('admin.Total')}} :
+                                        {{ currency($service->fees_amount + $service->price) }}
+                                        {{-- {{ currency($service->price) }} --}}
+                                    </h6>
+                                    <p>{{__('admin.Transaction Id')}} : {{ $service->transaction_id }}</p>
                                     <p>{{__('admin.Category')}} : {{ $service->category->translate->name }}</p>
                                     @if ($service->is_featured == 'enable')
                                         <p>{{__('admin.Highlight')}} :

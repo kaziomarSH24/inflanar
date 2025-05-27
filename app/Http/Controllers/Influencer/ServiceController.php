@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Influencer;
 
 use App\Http\Controllers\Controller;
+use App\Models\BankPayment;
 use Illuminate\Http\Request;
 
 use Modules\Service\Entities\Service;
@@ -16,10 +17,11 @@ use Modules\Service\Entities\CategoryTranslation;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Review;
-
+use App\Models\StripePayment;
 use Illuminate\Pagination\Paginator;
 use Auth, Image, File;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 use Modules\Subscription\Entities\PurchaseHistory;
 use Modules\Subscription\Entities\SubscriptionFee;
 
@@ -90,10 +92,8 @@ class ServiceController extends Controller
         return view('influencer.service_create', compact('categories', 'business_subscription_fees'));
     }
 
-    public function store(Request $request)
+    public function store_create_service_info_to_session(Request $request)
     {
-
-        dd($request->all());
         $request->validate([
             'image' => 'required',
             'name' => 'required',
@@ -101,6 +101,7 @@ class ServiceController extends Controller
             'price' => 'required|numeric',
             'category_id' => 'required',
             'description' => 'required',
+            'total_campaign' => 'required|numeric',
         ],[
             'image.required' => trans('admin_validation.Image is required'),
             'name.required' => trans('admin_validation.Name is required'),
@@ -108,7 +109,8 @@ class ServiceController extends Controller
             'slug.unique' => trans('admin_validation.Slug already exist'),
             'price.required' => trans('admin_validation.Price is required'),
             'category_id.required' => trans('admin_validation.Category is required'),
-            'description.required' => trans('admin_validation.Description is required')
+            'description.required' => trans('admin_validation.Description is required'),
+            'total_campaign.required' => trans('admin_validation.Total Campaign is required'),
         ]);
 
         //check subscription purchase history
@@ -120,45 +122,136 @@ class ServiceController extends Controller
             return redirect()->back()->with($notification);
         }
 
-        $service = new Service();
+        // $service = new Service();
 
         if($request->image){
             $extention = $request->image->getClientOriginalExtension();
             $banner_name = 'service-thumb'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
             $banner_name = 'uploads/custom-images/'.$banner_name;
             $request->image->move(public_path('uploads/custom-images/'),$banner_name);
-            $service->thumbnail_image = $banner_name;
+            $thumbnail_image = $banner_name;
         }
 
-        // $auth_user = Auth::guard('web')->user();
+        $auth_user = Auth::guard('web')->user();
 
-        $service->influencer_id = $auth_user->id; //here influencer means business user
-        $service->category_id = $request->category_id;
-        $service->slug = $request->slug;
-        $service->price = $request->price;
-        $service->status = 'active';
-        $service->tags = $request->tags;
-        $service->approve_by_admin = 'disable';
-        $service->save();
+        $service_info = [
+            'thumbnail_image' => $thumbnail_image,
+            'influencer_id' => $auth_user->id, //here influencer means business user
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+            'slug' => $request->slug,
+            'price' => $request->price,
+            'total_campaign' => $request->total_campaign,
+            'seo_title' => $request->seo_title ? $request->seo_title : $request->name,
+            'seo_description' => $request->seo_description ? $request->seo_description : $request->name,
+            'package_features' => $request->package_features ? json_encode($request->package_features) : null,
+            'status' => 'active',
+            'tags' => $request->tags,
+            'description' =>$request->description,
+            'approve_by_admin' => 'disable',
+        ];
+        $service_info = json_decode(json_encode($service_info));
 
-        $languages = Language::all();
-        foreach($languages as $language){
-            $service_translation = new ServiceTranslation();
-            $service_translation->lang_code = $language->lang_code;
-            $service_translation->service_id = $service->id;
-            $service_translation->title = $request->name;
-            $service_translation->description = $request->description;
-            $service_translation->features = json_encode($request->package_features);
-            $service_translation->seo_title = $request->seo_title ? $request->seo_title : $request->name;
-            $service_translation->seo_description = $request->seo_description ? $request->seo_description : $request->name;
-            $service_translation->save();
-        }
+        Session::put('service_info', $service_info);
 
-        $notification= trans('admin_validation.Created Successfully');
-        $notification=array('messege'=>$notification,'alert-type'=>'success');
-        return redirect()->route('influencer.service.edit', ['service' => $service->id, 'lang_code' => front_lang()])->with($notification);
+        // $service->influencer_id = $auth_user->id; //here influencer means business user
+        // $service->category_id = $request->category_id;
+        // $service->slug = $request->slug;
+        // $service->price = $request->price;
+        // $service->status = 'active';
+        // $service->tags = $request->tags;
+        // $service->approve_by_admin = 'disable';
+        // $service->save();
 
+        // $languages = Language::all();
+        // foreach($languages as $language){
+        //     $service_translation = new ServiceTranslation();
+        //     $service_translation->lang_code = $language->lang_code;
+        //     $service_translation->service_id = $service->id;
+        //     $service_translation->title = $request->name;
+        //     $service_translation->description = $request->description;
+        //     $service_translation->features = json_encode($request->package_features);
+        //     $service_translation->seo_title = $request->seo_title ? $request->seo_title : $request->name;
+        //     $service_translation->seo_description = $request->seo_description ? $request->seo_description : $request->name;
+        //     $service_translation->save();
+        // }
+        $stripe = StripePayment::first();
+        // dd($stripe)
+        $bank = BankPayment::first();
+
+        // return redirect()->route('influencer.service.edit');
+        return view('influencer.payment', compact('service_info', 'stripe', 'bank'));
     }
+
+    // public function store(Request $request)
+    // {
+
+    //     dd($request->all());
+    //     $request->validate([
+    //         'image' => 'required',
+    //         'name' => 'required',
+    //         'slug' => 'required|unique:services',
+    //         'price' => 'required|numeric',
+    //         'category_id' => 'required',
+    //         'description' => 'required',
+    //     ],[
+    //         'image.required' => trans('admin_validation.Image is required'),
+    //         'name.required' => trans('admin_validation.Name is required'),
+    //         'slug.required' => trans('admin_validation.Slug is required'),
+    //         'slug.unique' => trans('admin_validation.Slug already exist'),
+    //         'price.required' => trans('admin_validation.Price is required'),
+    //         'category_id.required' => trans('admin_validation.Category is required'),
+    //         'description.required' => trans('admin_validation.Description is required')
+    //     ]);
+
+    //     //check subscription purchase history
+    //     $auth_user = Auth::guard('web')->user();
+    //     //check subscription purchase history
+    //     $response = $this->canCreateService(auth()->id());
+    //     if ($response->status() == 403) {
+    //         $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
+    //         return redirect()->back()->with($notification);
+    //     }
+
+    //     $service = new Service();
+
+    //     if($request->image){
+    //         $extention = $request->image->getClientOriginalExtension();
+    //         $banner_name = 'service-thumb'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
+    //         $banner_name = 'uploads/custom-images/'.$banner_name;
+    //         $request->image->move(public_path('uploads/custom-images/'),$banner_name);
+    //         $service->thumbnail_image = $banner_name;
+    //     }
+
+    //     // $auth_user = Auth::guard('web')->user();
+
+    //     $service->influencer_id = $auth_user->id; //here influencer means business user
+    //     $service->category_id = $request->category_id;
+    //     $service->slug = $request->slug;
+    //     $service->price = $request->price;
+    //     $service->status = 'active';
+    //     $service->tags = $request->tags;
+    //     $service->approve_by_admin = 'disable';
+    //     $service->save();
+
+    //     $languages = Language::all();
+    //     foreach($languages as $language){
+    //         $service_translation = new ServiceTranslation();
+    //         $service_translation->lang_code = $language->lang_code;
+    //         $service_translation->service_id = $service->id;
+    //         $service_translation->title = $request->name;
+    //         $service_translation->description = $request->description;
+    //         $service_translation->features = json_encode($request->package_features);
+    //         $service_translation->seo_title = $request->seo_title ? $request->seo_title : $request->name;
+    //         $service_translation->seo_description = $request->seo_description ? $request->seo_description : $request->name;
+    //         $service_translation->save();
+    //     }
+
+    //     $notification= trans('admin_validation.Created Successfully');
+    //     $notification=array('messege'=>$notification,'alert-type'=>'success');
+    //     return redirect()->route('influencer.service.edit', ['service' => $service->id, 'lang_code' => front_lang()])->with($notification);
+
+    // }
 
     //can create service
     private function canCreateService($user_id){

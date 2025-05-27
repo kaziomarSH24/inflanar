@@ -95,7 +95,7 @@
                                 <hr>
                                 <p>{{__('admin.Status')}} :
                                     @if ($order->order_status == 'awaiting_for_influencer_approval')
-                                    {{__('admin.awaiting for influencer approval')}}
+                                    {{__('admin.awaiting for business approval')}}
                                     @elseif ($order->order_status == 'approved_by_influencer')
                                     {{__('admin.Approved')}}
                                     @elseif ($order->order_status == 'order_decliened_by_influencer')

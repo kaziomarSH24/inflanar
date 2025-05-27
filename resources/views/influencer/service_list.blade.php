@@ -8,7 +8,7 @@
         <section class="section">
           <div class="section-header">
             <h1>{{ $title }}</h1>
-
+{{-- @dd($services) --}}
           </div>
 
           <div class="section-body">
@@ -16,6 +16,7 @@
             <div class="row mt-4">
                 @if($services->count() > 0)
                 @foreach ($services as $service)
+                {{-- @dd($service) --}}
                     <div class="col-12">
                         <div class="card service_card">
                             <div class="card-body d-flex flex-wrap justify-content-between align-items-center">
@@ -25,6 +26,15 @@
                                     <h6>{{__('admin.Price')}} :
                                         {{ currency($service->price) }}
                                     </h6>
+                                    <h6>{{__('admin.Processing Fee')}} :
+                                        {{ currency($service->fees_amount) }}
+                                        {{-- {{ currency($service->price) }} --}}
+                                    </h6>
+                                    <h6>{{__('admin.Total')}} :
+                                        {{ currency($service->fees_amount + $service->price) }}
+                                        {{-- {{ currency($service->price) }} --}}
+                                    </h6>
+                                    <p>{{__('admin.Transaction Id')}} : {{ $service->transaction_id }}</p>
                                     <p>{{__('admin.Category')}} : {{ $service->category->name }}</p>
                                     @if ($service->is_featured == 'enable')
                                         <p>{{__('admin.Highlight')}} :

@@ -288,4 +288,6 @@
     'Assign Successfully' => 'Assign Successfully',
     'Please at first login in your account' => 'Please at first login in your account',
     'You\'ve successfully applied for this campaign! Good luck!' => 'You\'ve successfully applied for this campaign! Good luck!',
+    'Total Campaign is required' => 'Total Campaign is required',
+    'Your service has been created successfully. Please wait for admin approval.' => 'Your service has been created successfully. Please wait for admin approval.',
 );
