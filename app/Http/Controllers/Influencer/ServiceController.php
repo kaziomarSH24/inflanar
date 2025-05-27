@@ -121,9 +121,7 @@ class ServiceController extends Controller
             $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
             return redirect()->back()->with($notification);
         }
-
-        // $service = new Service();
-
+        
         if($request->image){
             $extention = $request->image->getClientOriginalExtension();
             $banner_name = 'service-thumb'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
@@ -154,32 +152,8 @@ class ServiceController extends Controller
 
         Session::put('service_info', $service_info);
 
-        // $service->influencer_id = $auth_user->id; //here influencer means business user
-        // $service->category_id = $request->category_id;
-        // $service->slug = $request->slug;
-        // $service->price = $request->price;
-        // $service->status = 'active';
-        // $service->tags = $request->tags;
-        // $service->approve_by_admin = 'disable';
-        // $service->save();
-
-        // $languages = Language::all();
-        // foreach($languages as $language){
-        //     $service_translation = new ServiceTranslation();
-        //     $service_translation->lang_code = $language->lang_code;
-        //     $service_translation->service_id = $service->id;
-        //     $service_translation->title = $request->name;
-        //     $service_translation->description = $request->description;
-        //     $service_translation->features = json_encode($request->package_features);
-        //     $service_translation->seo_title = $request->seo_title ? $request->seo_title : $request->name;
-        //     $service_translation->seo_description = $request->seo_description ? $request->seo_description : $request->name;
-        //     $service_translation->save();
-        // }
         $stripe = StripePayment::first();
-        // dd($stripe)
         $bank = BankPayment::first();
-
-        // return redirect()->route('influencer.service.edit');
         return view('influencer.payment', compact('service_info', 'stripe', 'bank'));
     }
 

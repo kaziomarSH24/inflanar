@@ -150,14 +150,14 @@
                                 @endif
                                 --}}
 
-                                @if ($bank->status == 1)
+                                {{-- @if ($bank->status == 1)
                                     <li>
                                         <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                             <input class="form-check-input payment-stripe-button " type="radio" value="" id="payment-10" name="payment-method">
                                             <label class="form-check-label inflanar-payment-method__label" for="payment-10"><img src="{{ asset($bank->image) }}"></label>
                                         </a>
                                     </li>
-                                @endif
+                                @endif --}}
 
                                 @if (Module::isEnabled('PaymentGateway'))
                                     @include('payment_for_addon')

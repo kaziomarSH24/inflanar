@@ -37,6 +37,7 @@
                 </a></li>
 
                 <li class="{{ Route::is('admin.declined-booking') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.declined-booking') }}">{{__('admin.Declined Bookings')}}</a></li>
+                <li class="{{ Route::is('admin.completed-booking') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin.completed-booking') }}">{{__('admin.Influencer Payouts')}}</a></li>
 
 
               </ul>

@@ -19,13 +19,13 @@
 
                 <li class="{{ Route::is('influencer.awaiting-booking') ? 'active' : '' }}"><a class="nav-link" href="{{ route('influencer.awaiting-booking') }}">{{__('admin.Awaiting Approval')}}</a></li>
 
-                <li class="{{ Route::is('influencer.active-booking') ? 'active' : '' }}"><a class="nav-link" href="{{ route('influencer.active-booking') }}">{{__('admin.Active Bookings')}}</a></li>
+                <li class="{{ Route::is('influencer.active-booking') ? 'active' : '' }}"><a class="nav-link" href="{{ route('influencer.active-booking') }}">{{__('admin.Active Campaigns')}}</a></li>
 
-                <li class="{{ Route::is('influencer.completed-booking') ? 'active' : '' }}"><a class="nav-link" href="{{ route('influencer.completed-booking') }}">{{__('admin.Completed Bookings')}}</a></li>
+                <li class="{{ Route::is('influencer.completed-booking') ? 'active' : '' }}"><a class="nav-link" href="{{ route('influencer.completed-booking') }}">{{__('admin.Completed Campaigns')}}</a></li>
 
                 <li class="{{ Route::is('influencer.complete-request') ? 'active' : '' }}"><a class="nav-link" href="{{ route('influencer.complete-request') }}">{{__('admin.Complete Request')}}</a></li>
 
-                <li class="{{ Route::is('influencer.declined-booking') ? 'active' : '' }}"><a class="nav-link" href="{{ route('influencer.declined-booking') }}">{{__('admin.Declined Bookings')}}</a></li>
+                <li class="{{ Route::is('influencer.declined-booking') ? 'active' : '' }}"><a class="nav-link" href="{{ route('influencer.declined-booking') }}">{{__('admin.Declined Influencers')}}</a></li>
 
 
             </ul>

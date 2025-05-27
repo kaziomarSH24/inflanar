@@ -851,6 +851,12 @@
   'Edit Portfolio' => 'Edit Portfolio',
   'Update Portfolio' => 'Update Portfolio',
   'My Service' => 'My Service',
+//   new added
   'Service Create Information' => 'معلومات إنشاء الخدمة',
   'Transaction Id' => 'معرف المعاملة',
+  'Declined by Business' => 'تم رفضه بواسطة العمل',
+  'Influencer Payouts' => 'مدفوعات المؤثرين',
+  'Active Campaigns' => 'الحملات النشطة',
+  'Completed Campaigns' => 'الحملات المكتملة',
+  'Declined Influencers' => 'المؤثرون المرفوضون',
 );

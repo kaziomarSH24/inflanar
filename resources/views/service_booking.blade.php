@@ -72,8 +72,7 @@ $tags .= $service_tag->value.', ';
 
                                     {!! clean($service->description) !!}
 
-                                    <h4 class="inflanar-sdetail__tcontent--title mg-top-40">{{__('admin.Package
-                                        Features')}}</h4>
+                                    <h4 class="inflanar-sdetail__tcontent--title mg-top-40">{{__('admin.Package Features')}}</h4>
                                     <div class="row mg-btm-20">
                                         <div class="col-lg-6 col-12">
                                             <ul
