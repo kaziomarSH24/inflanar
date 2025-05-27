@@ -121,7 +121,7 @@ class ServiceController extends Controller
             $notification=array('messege'=>$response->getData()->message,'alert-type'=>'error');
             return redirect()->back()->with($notification);
         }
-        
+
         if($request->image){
             $extention = $request->image->getClientOriginalExtension();
             $banner_name = 'service-thumb'.date('-Y-m-d-h-i-s-').rand(999,9999).'.'.$extention;
@@ -137,6 +137,7 @@ class ServiceController extends Controller
             'influencer_id' => $auth_user->id, //here influencer means business user
             'name' => $request->name,
             'category_id' => $request->category_id,
+            'category_name' => Category::find($request->category_id)->translate->name,
             'slug' => $request->slug,
             'price' => $request->price,
             'total_campaign' => $request->total_campaign,

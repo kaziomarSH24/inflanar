@@ -42,18 +42,21 @@
                                 <div class="inflanar-sdetail__tcontent mg-top-10">
                                     <ul class="inflanar-booking-info list-none">
                                         <li>
-                                            <span class="inflanar-booking-info__label">{{__('admin.Name')}}:</span> <span class="inflanar-booking-info__desc">{{ $service_info->name }}:</span>
+                                            <span class="inflanar-booking-info__label">{{__('admin.Name')}}:</span> <span class="inflanar-booking-info__desc">{{ $service_info->name }}</span>
+                                        </li>
+                                        <li>
+                                            <span class="inflanar-booking-info__label">{{__('admin.Category')}}:</span> <span class="inflanar-booking-info__desc">{{ $service_info->category_name }}</span>
                                         </li>
                                         <li>
                                             <span class="inflanar-booking-info__label">{{__('admin.Description')}}:</span> <span class="inflanar-booking-info__desc">{!! $service_info->description !!}</span>
                                         </li>
                                         <li>
                                             <span class="inflanar-booking-info__label">{{__('admin.Price')}}:</span>
-                                            <span class="inflanar-booking-info__desc">{{ $service_info->price }}</span>
+                                            <span class="inflanar-booking-info__desc">{{ currency($service_info->price) }}</span>
                                         </li>
                                         <li>
                                             <span class="inflanar-booking-info__label">{{__('admin.Total Campaign Spand')}}:</span>
-                                            <span class="inflanar-booking-info__desc">{{ $service_info->total_campaign }}</span>
+                                            <span class="inflanar-booking-info__desc">{{ currency($service_info->total_campaign) }}</span>
                                         </li>
 
                                     </ul>
