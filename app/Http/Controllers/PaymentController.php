@@ -376,47 +376,47 @@ class PaymentController extends Controller
         }
 
 
-    // public function apply_coupon(Request $request){
+    public function apply_coupon(Request $request){
 
-    //     $rules = [
-    //         'coupon'=>'required',
-    //     ];
-    //     $customMessages = [
-    //         'coupon.required' => trans('admin_validation.Coupon is required'),
-    //     ];
+        $rules = [
+            'coupon'=>'required',
+        ];
+        $customMessages = [
+            'coupon.required' => trans('admin_validation.Coupon is required'),
+        ];
 
-    //     $this->validate($request, $rules,$customMessages);
+        $this->validate($request, $rules,$customMessages);
 
-    //     $coupon = Coupon::where(['coupon_code' => $request->coupon, 'status' => 1])->first();
+        $coupon = Coupon::where(['coupon_code' => $request->coupon, 'status' => 1])->first();
 
-    //     if(!$coupon){
-    //         $notification = trans('admin_validation.Invalid coupon');
-    //         $notification = array('messege'=>$notification,'alert-type'=>'error');
-    //         return redirect()->back()->with($notification);
-    //     }
+        if(!$coupon){
+            $notification = trans('admin_validation.Invalid coupon');
+            $notification = array('messege'=>$notification,'alert-type'=>'error');
+            return redirect()->back()->with($notification);
+        }
 
-    //     if($coupon->expired_date < date('Y-m-d')){
-    //         $notification = trans('admin_validation.Coupon already expired');
-    //         $notification = array('messege'=>$notification,'alert-type'=>'error');
-    //         return redirect()->back()->with($notification);
-    //     }
+        if($coupon->expired_date < date('Y-m-d')){
+            $notification = trans('admin_validation.Coupon already expired');
+            $notification = array('messege'=>$notification,'alert-type'=>'error');
+            return redirect()->back()->with($notification);
+        }
 
-    //     if($coupon->influencer_id != 0){
-    //         if($coupon->influencer_id != $request->influencer_id){
-    //             $notification = trans('admin_validation.You can not apply another provider coupon');
-    //             $notification = array('messege'=>$notification,'alert-type'=>'error');
-    //             return redirect()->back()->with($notification);
-    //         }
-    //     }
+        if($coupon->influencer_id != 0){
+            if($coupon->influencer_id != $request->influencer_id){
+                $notification = trans('admin_validation.You can not apply another provider coupon');
+                $notification = array('messege'=>$notification,'alert-type'=>'error');
+                return redirect()->back()->with($notification);
+            }
+        }
 
-    //     Session::put('coupon_code', $coupon->coupon_code);
-    //     Session::put('offer_percentage', $coupon->offer_percentage);
+        Session::put('coupon_code', $coupon->coupon_code);
+        Session::put('offer_percentage', $coupon->offer_percentage);
 
-    //     $notification = trans('admin_validation.Coupon applied successful');
-    //     $notification = array('messege'=>$notification,'alert-type'=>'success');
-    //     return redirect()->back()->with($notification);
+        $notification = trans('admin_validation.Coupon applied successful');
+        $notification = array('messege'=>$notification,'alert-type'=>'success');
+        return redirect()->back()->with($notification);
 
-    // }
+    }
 
     // public function pay_via_bank(Request $request, $slug){
 
