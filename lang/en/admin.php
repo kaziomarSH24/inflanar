@@ -953,4 +953,5 @@
   'Active Campaigns' => 'Active Campaigns',
   'Completed Campaigns' => 'Completed Campaigns',
   'Declined Influencers' => 'Declined Influencers',
+  'Add Description' => 'Add Description',
 );

@@ -58,6 +58,8 @@
                     {{-- For business provider --}}
                     @if (auth()->user() && auth()->user()->is_influencer == 'yes') {{-- here influencer means business
                     provider role --}}
+
+                    @dd($business_plans)
                     @foreach ($business_plans as $index => $plan )
                     <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
                         <div class="pricing-pack highlighted">

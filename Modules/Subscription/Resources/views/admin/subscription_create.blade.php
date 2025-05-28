@@ -73,7 +73,8 @@
                                                 class="fa fa-info-circle text--primary"
                                                 title="For unlimited service use(-1)"> <span
                                                     class="text-danger">*</span></label>
-                                        <label for="" id="maxApplies" style="display: none">{{__('admin.Maximum Applies')}} <span data-toggle="tooltip" data-placement="top"
+                                        <label for="" id="maxApplies" style="display: none">{{__('admin.Maximum
+                                            Applies')}} <span data-toggle="tooltip" data-placement="top"
                                                 class="fa fa-info-circle text--primary"
                                                 title="For unlimited applies use(-1)"> <span
                                                     class="text-danger">*</span></label>
@@ -91,6 +92,20 @@
                                             <option value="1">{{__('admin.Active')}}</option>
                                             <option value="0">{{__('admin.Inactive')}}</option>
                                         </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="row" id="addDescriptionBox">
+                                            <div class="form-group col-8">
+                                                <label>{{__('admin.Add Description')}}</label>
+                                                <input type="text" class="form-control" name="description[]"
+                                                    autocomplete="off">
+                                            </div>
+                                            <div class="col-4">
+                                                <button type="button" type="button" id="addNewDecription"
+                                                    class="btn btn-success btn_mt_33"><i class="fa fa-plus"
+                                                        aria-hidden="true"></i> {{__('admin.Add New')}}</button>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="form-group col-md-12">
@@ -121,6 +136,28 @@
                 $('#maxService').hide();
                 $('#maxApplies').show();
             }
+        });
+
+
+        // Add new description field
+        $('#addNewDecription').on('click', function () {
+            var newDescription = `<div class="form-group col-8">
+                                    <label>{{__('admin.Add Description')}}</label>
+                                        <input type="text" class="form-control" name="description[]" autocomplete="off">
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="button" class="btn btn-danger removeDescriptionBtn btn_mt_33"><i class="fa fa-trash"
+                                                aria-hidden="true"></i> {{__('admin.Remove')}}</button>
+                                    </div>`;
+            $('#addDescriptionBox').append(newDescription);
+        });
+
+        // Remove description field
+        $(document).on('click', '.removeDescriptionBtn', function () {
+            var buttonWrapper = $(this).closest('.col-4');
+            var inputWrapper = buttonWrapper.prev('.form-group.col-8');
+            inputWrapper.remove();
+            buttonWrapper.remove();
         });
     });
 </script>

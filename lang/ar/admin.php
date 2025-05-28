@@ -859,4 +859,5 @@
   'Active Campaigns' => 'الحملات النشطة',
   'Completed Campaigns' => 'الحملات المكتملة',
   'Declined Influencers' => 'المؤثرون المرفوضون',
+  'Add Description' => 'إضافة وصف',
 );

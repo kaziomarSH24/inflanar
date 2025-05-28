@@ -10,6 +10,20 @@ class SubscriptionPlan extends Model
     use HasFactory;
 
     protected $fillable = [];
+
+
+
+    //description json decoded
+    // protected $casts = [
+    //     'description' => 'array',
+    // ];
+
+    public function getDescriptionAttribute($value)
+    {
+        // dd(json_decode($value, true));
+        return json_decode($value, true);
+    }
+
     
     protected static function newFactory()
     {

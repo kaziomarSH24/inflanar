@@ -42,6 +42,10 @@ class SubscriptionController extends Controller
             'maximum_service' => 'required',
             'serial' => 'required',
             'status' => 'required',
+            //add_description array
+            'description' => 'array|required',
+            'description.*' => 'required|string|max:255',
+
         ],[
             // 'type.required' => trans('admin_validation.Plan Type is required'),
             // 'plan_name.required' => trans('admin_validation.Plan name is required'),
@@ -54,7 +58,8 @@ class SubscriptionController extends Controller
             'plan_price.required' => trans('Plan price is required'),
             'expiration_date.required' => trans('Expiration date is required'),
             'maximum_service.required' => trans('Maximum service is required'),
-            'serial.required' => trans('Serial is required')
+            'serial.required' => trans('Serial is required'),
+            'description.*.required' => 'The additional description field is required.',
 
         ]);
 
@@ -67,6 +72,7 @@ class SubscriptionController extends Controller
         $plan->maximum_service = $request->maximum_service;
         $plan->serial = $request->serial;
         $plan->status = $request->status;
+        $plan->description = json_encode($request->description);
         $plan->save();
 
         $notification = trans('admin_validation.Create Successfully');
@@ -83,7 +89,8 @@ class SubscriptionController extends Controller
     {
 
         $plan = SubscriptionPlan::find($id);
-
+        // $plan->description = json_decode($plan->description); // Decode the JSON to an array
+        // dd($plan);
         return view('subscription::admin.subscription_edit', compact('plan'));
     }
 
@@ -97,13 +104,16 @@ class SubscriptionController extends Controller
             'maximum_service' => 'required',
             'serial' => 'required',
             'status' => 'required',
+            'description' => 'array|required',
+            'description.*' => 'required|string|max:255',
         ],[
             'type.required' => trans('admin_validation.Plan Type is required'),
             'plan_name.required' => trans('admin_validation.Plan name is required'),
             'plan_price.required' => trans('admin_validation.Plan price is required'),
             'expiration_date.required' => trans('admin_validation.Expiration date is required'),
             'maximum_service.required' => trans('admin_validation.Maximum service is required'),
-            'serial.required' => trans('admin_validation.Serial is required')
+            'serial.required' => trans('admin_validation.Serial is required'),
+            'description.*.required' => 'The additional description field is required.',
 
         ]);
 
@@ -115,6 +125,7 @@ class SubscriptionController extends Controller
         $plan->maximum_service = $request->maximum_service;
         $plan->serial = $request->serial;
         $plan->status = $request->status;
+        $plan->description = json_encode($request->description); // Encode the array back to JSON
         $plan->save();
 
         $notification = trans('admin_validation.Update Successfully');

@@ -21,6 +21,7 @@
                 <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
                     tabindex="0">
                     <div class="row">
+                        {{-- @dd($business_plans) --}}
                         @foreach ($business_plans as $index => $plan )
                         <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
                             <div class="pricing-pack highlighted">
@@ -58,6 +59,19 @@
                                 </div>
                                 <div class="pack-content d-flex flex-column align-items-center">
                                     <ul class="pack-feature m-0">
+                                        @if ($plan->description)
+                                         @foreach ($plan->description as $des )
+                                            <li class="d-flex pack-feature-item gap-2 py-1 align-items-center">
+                                            <svg width="13" height="11" viewBox="0 0 13 11" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M4.17233 6.25635C4.52039 5.86472 4.85298 5.4802 5.20103 5.10281C6.77888 3.38674 8.49982 1.80597 10.4721 0.474411C10.6771 0.335559 10.8898 0.203828 11.1064 0.0756565C11.176 0.0364932 11.2649 0.00445038 11.3461 0.00445038C11.7909 -0.00267023 12.2356 0.000890077 12.6765 0.000890077C12.8157 0.000890077 12.9279 0.0436138 12.9781 0.168225C13.0284 0.289275 12.9897 0.392524 12.8853 0.481532C11.0793 1.99822 9.59039 3.76413 8.17497 5.58701C6.8717 7.26392 5.6651 9.00135 4.53199 10.7851C4.49332 10.8491 4.44304 10.9168 4.3773 10.956C4.23808 11.045 4.07952 10.9951 3.9751 10.842C3.80108 10.5857 3.63865 10.3222 3.45302 10.073C2.36631 8.63107 1.27187 7.18915 0.181301 5.75079C0.138761 5.69738 0.0923532 5.64398 0.0536803 5.58701C-0.0236653 5.47308 -0.019798 5.34847 0.0807513 5.2559C0.370797 4.98532 0.668578 4.71474 0.966359 4.44771C1.08238 4.34447 1.20613 4.35159 1.36082 4.44771C1.84036 4.7539 2.31991 5.06365 2.79558 5.36983C3.25192 5.66534 3.70826 5.95728 4.17233 6.25635Z"
+                                                    fill="#FE2C55" />
+                                            </svg>
+                                            {{ $des }}
+                                        </li>
+                                         @endforeach
+                                        @else
                                         <li class="d-flex pack-feature-item gap-2 py-1 align-items-center">
                                             <svg width="13" height="11" viewBox="0 0 13 11" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
@@ -67,7 +81,6 @@
                                             </svg>
                                             {{ $plan->maximum_service }} {{__('admin.Service Upload')}}
                                         </li>
-
                                         <li class="d-flex pack-feature-item gap-2 py-1 align-items-center">
                                             <svg width="13" height="11" viewBox="0 0 13 11" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
@@ -122,6 +135,7 @@
                                             </svg>
                                             {{__('admin.24/7 Hour Support')}}
                                         </li>
+                                        @endif
                                     </ul>
                                 </div>
                                 <div class="pack-btn-wrapper">
