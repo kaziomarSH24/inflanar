@@ -471,7 +471,7 @@
   'Are You sure delete this item ?' => 'Are You sure delete this item ?',
   'Booking Id' => 'Booking Id',
   'Booking Created' => 'Booking Created',
-  'awaiting for Business approval' => 'awaiting for Business approval',
+  'awaiting for business approval' => 'awaiting for business approval',
   'Approved' => 'Approved',
 //   'Declined by business' => 'Declined by business',
   'Declined by influencer' => 'Declined by influencer',
