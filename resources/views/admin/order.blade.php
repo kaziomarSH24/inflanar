@@ -94,7 +94,7 @@
 
                                         @if ($order->order_status == 'awaiting_for_influencer_approval')
                                             {{-- <span class="badge badge-danger">{{__('admin.awaiting for influencer approval')}}</span> --}}
-                                            <span class="badge badge-danger">{{__('admin.awaiting for Business approval')}}</span>
+                                            <span class="badge badge-danger">{{__('admin.Awaiting for Business approval')}}</span>
                                         @elseif ($order->order_status == 'approved_by_influencer')
                                             <span class="badge badge-success">{{__('admin.Approved')}}</span>
                                         @elseif ($order->order_status == 'order_decliened_by_influencer')
