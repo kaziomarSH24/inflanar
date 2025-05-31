@@ -155,8 +155,7 @@
                                             @if ($plan->plan_price == 0)
                                             @if ($plans->plan_id == $plan->id)
                                             <a class="pack-action-btn highlighted-btn"
-                                                href="{{ route('subscription-payment', $plan->id) }}">{{__('admin.Current
-                                                Plan')}}</a>
+                                                href="{{ route('subscription-payment', $plan->id) }}">{{__('admin.Current Plan')}}</a>
                                             @else
                                             <a class="pack-action-btn highlighted-btn"
                                                 href="{{ route('subscription-payment', $plan->id) }}">{{__('admin.Trail
@@ -166,8 +165,7 @@
                                             @else
                                             @if ($plans->plan_id == $plan->id)
                                             <a class="pack-action-btn highlighted-btn"
-                                                href="{{ route('subscription-payment', $plan->id) }}">{{__('admin.Current
-                                                Plan')}}</a>
+                                                href="{{ route('subscription-payment', $plan->id) }}">{{__('admin.Current Plan')}}</a>
                                             @else
                                             <a class="pack-action-btn highlighted-btn"
                                                 href="{{ route('subscription-payment', $plan->id) }}">{{__('admin.Upgrade')}}</a>
