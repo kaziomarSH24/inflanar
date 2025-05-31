@@ -41,13 +41,13 @@
                                             <input type="checkbox" name="agree_fees" class="custom-control-input"
                                                 id="agree_fees" data-fees="{{ $business_subscription_fees->fees }}"
                                                 data-fees-type="{{ $business_subscription_fees->fees_type }}">
-                                            <label class="custom-control-label" for="agree_fees">I agree to the {{
+                                            <label class="custom-control-label" for="agree_fees">I agree to a {{
                                                 $business_subscription_fees->fees_type == 'percentage' ?
                                                 $business_subscription_fees->fees . '%' : '$' .
                                                 $business_subscription_fees->fees }} processing fee <span
                                                     data-toggle="tooltip" data-placement="top"
                                                     class="fa fa-info-circle text--primary" title=""
-                                                    data-original-title="This fee applies to influencers. When an influencer books this service, a {{ $business_subscription_fees->fees_type == 'percentage' ? $business_subscription_fees->fees . '%' : '$' . $business_subscription_fees->fees }} fee will be added to their total charge.">
+                                                    data-original-title="This fee applies when paying for campaigns a {{ $business_subscription_fees->fees_type == 'percentage' ? $business_subscription_fees->fees . '%' : '$' . $business_subscription_fees->fees }} platform fee will be taken from the total amount.">
                                                     <span class="text-danger">*</span>
                                                 </span>
                                             </label>
