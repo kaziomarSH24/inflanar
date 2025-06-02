@@ -485,7 +485,8 @@ class PaymentController extends Controller
     public function pay_via_stripe(Request $request, $slug){
         // dd($request->all(), Session::get('service_info'));
 
-        $service_info = Session::get('service_info');
+        try {
+            $service_info = Session::get('service_info');
         // dd($booking_info);
         if(!$service_info){
             $notification = trans('admin_validation.Something went wrong, please try again');
@@ -511,6 +512,13 @@ class PaymentController extends Controller
         $notification = trans('admin_validation.Your service has been created successfully. Please wait for admin approval.');
         $notification = array('messege'=>$notification,'alert-type'=>'success');
         return redirect()->route('influencer.service.edit', ['service' => $service->id, 'lang_code' => front_lang()])->with($notification);
+        } catch (\Stripe\Exception\CardException $e) {
+            $errorMessage = $e->getError()->message ?? "This card has been declined";
+            return redirect()->back()->with(['error' => $errorMessage]);
+        }catch(Exception $e) {
+            $errorMessage = $e->getMessage();
+            return redirect()->back()->with(['error' => "Something went wrong, please try again."]);
+        }
     }
 
 
